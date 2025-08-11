@@ -1,0 +1,16 @@
+[
+    {
+        "id": 1,
+        "roomId": 1,
+        "studentId": 1,
+        "rating": 4,
+        "comments": "Room was clean and the projector worked perfectly."
+    },
+    {
+        "id": 2,
+        "roomId": 2,
+        "studentId": 2,
+        "rating": 3,
+        "comments": "Room was noisy due to the adjacent area."
+    }
+]

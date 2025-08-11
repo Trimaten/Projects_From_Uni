@@ -1,0 +1,73 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "homeassistant.exposed_entities",
+  "data": {
+    "assistants": {},
+    "exposed_entities": {
+      "zone.home": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "conversation.home_assistant": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "sun.sun": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "automation.send_color_or_slider_via_mqtt": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "automation.send_lon_or_loff_based_on_switch_state": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "automation.send_mon_and_number_of_turns_on_button_press": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "automation.send_son_on_button_press": {
+        "assistants": {
+          "conversation": {
+            "should_expose": false
+          }
+        }
+      },
+      "switch.my_led_strip": {
+        "assistants": {
+          "conversation": {
+            "should_expose": true
+          }
+        }
+      },
+      "switch.loff_lon_switch": {
+        "assistants": {
+          "conversation": {
+            "should_expose": true
+          }
+        }
+      }
+    }
+  }
+}

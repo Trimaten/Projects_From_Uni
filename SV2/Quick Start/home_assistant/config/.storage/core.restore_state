@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "core.restore_state",
+  "data": [
+    {
+      "state": {"entity_id":"input_button.send_mon_button","state":"2025-01-19T11:22:53.840330+00:00","attributes":{"editable":false,"friendly_name":"Send mON"},"last_changed":"2025-01-19T11:22:53.840367+00:00","last_reported":"2025-01-19T11:22:53.840367+00:00","last_updated":"2025-01-19T11:22:53.840367+00:00","context":{"id":"01JHZ4TAGGFQ7M888Q4C9YAR31","parent_id":null,"user_id":"1acc231db705465880e796e0b56da4ba"}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"input_button.send_sbn_button","state":"2025-01-19T11:22:55.244348+00:00","attributes":{"editable":false,"friendly_name":"Send sON"},"last_changed":"2025-01-19T11:22:55.244383+00:00","last_reported":"2025-01-19T11:22:55.244383+00:00","last_updated":"2025-01-19T11:22:55.244383+00:00","context":{"id":"01JHZ4TBWCP6VCMHFQ3A1EHDSF","parent_id":null,"user_id":"1acc231db705465880e796e0b56da4ba"}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"input_number.number_field","state":"0.0","attributes":{"initial":0.0,"editable":false,"min":-12.0,"max":12.0,"step":1.0,"mode":"slider","friendly_name":"Number of Turns"},"last_changed":"2025-01-19T11:08:57.916479+00:00","last_reported":"2025-01-19T11:08:57.916479+00:00","last_updated":"2025-01-19T11:08:57.916479+00:00","context":{"id":"01JHZ40T5WNC5Z7R2M7P9YWJEE","parent_id":null,"user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"input_number.slider_value","state":"10.0","attributes":{"initial":5.0,"editable":false,"min":1.0,"max":10.0,"step":1.0,"mode":"slider","friendly_name":"Motor Speed"},"last_changed":"2025-01-19T11:22:45.925104+00:00","last_reported":"2025-01-19T11:22:45.925104+00:00","last_updated":"2025-01-19T11:22:45.925104+00:00","context":{"id":"01JHZ4T2S4RSBT79PSPYN88A2C","parent_id":null,"user_id":"1acc231db705465880e796e0b56da4ba"}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"conversation.home_assistant","state":"unknown","attributes":{"friendly_name":"Home Assistant","supported_features":1},"last_changed":"2025-01-19T11:08:57.950865+00:00","last_reported":"2025-01-19T11:08:57.950865+00:00","last_updated":"2025-01-19T11:08:57.950865+00:00","context":{"id":"01JHZ40T6Y9P7CFTY7M9807KWZ","parent_id":null,"user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"input_text.color_picker","state":"FF1100","attributes":{"editable":false,"min":6,"max":6,"pattern":"^[0-9A-F]{6}$","mode":"text","friendly_name":"Color Picker"},"last_changed":"2025-01-19T11:22:51.551920+00:00","last_reported":"2025-01-19T11:22:51.551920+00:00","last_updated":"2025-01-19T11:22:51.551920+00:00","context":{"id":"01JHZ4T88Z84PZH7YC5M56RE45","parent_id":null,"user_id":"1acc231db705465880e796e0b56da4ba"}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"automation.send_color_or_slider_via_mqtt","state":"on","attributes":{"last_triggered":"2025-01-19T11:22:51.552142+00:00","mode":"single","current":0,"friendly_name":"Send Color or Slider via MQTT"},"last_changed":"2025-01-19T11:08:58.178683+00:00","last_reported":"2025-01-19T11:22:51.554279+00:00","last_updated":"2025-01-19T11:22:51.554279+00:00","context":{"id":"01JHZ4T890KZEKRWBH00EMYR2F","parent_id":"01JHZ4T88Z84PZH7YC5M56RE45","user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"automation.send_lon_or_loff_based_on_switch_state","state":"on","attributes":{"last_triggered":"2025-01-19T11:10:46.927575+00:00","mode":"single","current":0,"friendly_name":"Send LON or LOFF based on switch state"},"last_changed":"2025-01-19T11:08:58.178788+00:00","last_reported":"2025-01-19T11:10:46.928210+00:00","last_updated":"2025-01-19T11:10:46.928210+00:00","context":{"id":"01JHZ444MFESZTDYE09FR2V740","parent_id":"01JHZ444MF12XV05MKXPRQ32N0","user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"automation.send_mon_and_number_of_turns_on_button_press","state":"on","attributes":{"last_triggered":"2025-01-19T11:22:53.840550+00:00","mode":"single","current":0,"friendly_name":"Send mON and Number of Turns on Button Press"},"last_changed":"2025-01-19T11:08:58.178859+00:00","last_reported":"2025-01-19T11:22:53.842006+00:00","last_updated":"2025-01-19T11:22:53.842006+00:00","context":{"id":"01JHZ4TAGGF959RQ7TNECYZ705","parent_id":"01JHZ4TAGGFQ7M888Q4C9YAR31","user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"automation.send_son_on_button_press","state":"on","attributes":{"last_triggered":"2025-01-19T11:22:55.244575+00:00","mode":"single","current":0,"friendly_name":"Send sON on Button Press"},"last_changed":"2025-01-19T11:08:58.178915+00:00","last_reported":"2025-01-19T11:22:55.246143+00:00","last_updated":"2025-01-19T11:22:55.246143+00:00","context":{"id":"01JHZ4TBWCWCA6DPV7QN6B11R8","parent_id":"01JHZ4TBWCP6VCMHFQ3A1EHDSF","user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"person.riller","state":"unknown","attributes":{"editable":true,"id":"riller","device_trackers":[],"user_id":"1acc231db705465880e796e0b56da4ba","friendly_name":"Riller"},"last_changed":"2025-01-19T11:09:19.742515+00:00","last_reported":"2025-01-19T11:09:19.742726+00:00","last_updated":"2025-01-19T11:09:19.742515+00:00","context":{"id":"01JHZ41FFYMJHS79XEGRC06QVM","parent_id":null,"user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"tts.google_translate_en_com","state":"unknown","attributes":{"friendly_name":"Google Translate en com"},"last_changed":"2025-01-19T11:09:25.279350+00:00","last_reported":"2025-01-19T11:09:25.279427+00:00","last_updated":"2025-01-19T11:09:25.279350+00:00","context":{"id":"01JHZ41MWZV2A6B8VCZ2GES24R","parent_id":null,"user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"switch.my_led_strip","state":"off","attributes":{"friendly_name":"My Led Strip"},"last_changed":"2025-01-19T11:22:44.009778+00:00","last_reported":"2025-01-19T11:22:44.009778+00:00","last_updated":"2025-01-19T11:22:44.009778+00:00","context":{"id":"01JHZ4T0SGK9GFRT6DHMPKTKGH","parent_id":null,"user_id":"1acc231db705465880e796e0b56da4ba"}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    },
+    {
+      "state": {"entity_id":"switch.loff_lon_switch","state":"unknown","attributes":{"friendly_name":"LOFF/LON Switch"},"last_changed":"2025-01-19T11:10:46.927366+00:00","last_reported":"2025-01-19T11:10:46.927366+00:00","last_updated":"2025-01-19T11:10:46.927366+00:00","context":{"id":"01JHZ444MF12XV05MKXPRQ32N0","parent_id":null,"user_id":null}},
+      "extra_data": null,
+      "last_seen": "2025-01-19T11:28:19.289408+00:00"
+    }
+  ]
+}

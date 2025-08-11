@@ -1,0 +1,17 @@
+services:
+  db:
+    image: postgres:13
+    environment:
+      POSTGRES_USER: Kot
+      POSTGRES_PASSWORD: kot
+      POSTGRES_DB: Kotbank
+    ports:
+      - "5432:5432"
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "Kot", "-d", "Kotbank"]
+      interval: 10s
+      retries: 5
+      start_period: 30s
+      timeout: 5s

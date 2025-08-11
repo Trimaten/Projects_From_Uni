@@ -1,0 +1,8 @@
+2025-01-19 12:08:56.087 WARNING (SyncWorker_0) [homeassistant.util.yaml.loader] YAML file /config/configuration.yaml contains duplicate key "automation". Check lines 8 and 80
+2025-01-19 12:09:25.155 WARNING (MainThread) [homeassistant.helpers.translation] Failed to load integration for translation: Invalid domain homeassistant.scene
+2025-01-19 12:09:25.156 WARNING (MainThread) [homeassistant.helpers.translation] Failed to load integration for translation: Invalid domain mobile_app.notify
+2025-01-19 12:09:25.156 WARNING (MainThread) [homeassistant.helpers.translation] Failed to load integration for translation: Invalid domain sun.sensor
+2025-01-19 12:09:25.156 WARNING (MainThread) [homeassistant.helpers.translation] Failed to load integration for translation: Invalid domain cloud.tts
+2025-01-19 12:09:25.156 WARNING (MainThread) [homeassistant.helpers.translation] Failed to load integration for translation: Invalid domain energy.sensor
+2025-01-19 12:09:36.291 WARNING (MainThread) [homeassistant.components.http.ban] Login attempt or request with invalid authentication from 172.21.0.1 (172.21.0.1). Requested URL: '/api/onboarding/installation_type'. (Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/132.0.0.0 Safari/537.36)
+2025-01-19 12:10:46.912 WARNING (SyncWorker_7) [homeassistant.util.yaml.loader] YAML file /config/configuration.yaml contains duplicate key "automation". Check lines 8 and 80

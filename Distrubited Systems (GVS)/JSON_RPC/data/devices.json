@@ -1,0 +1,16 @@
+{
+  "lights": {
+    "livingRoom": {
+      "status": "off"
+    },
+    "kitchen": {
+      "status": "on"
+    }
+  },
+  "roomba": {
+    "status": "working"
+  },
+  "thermostat": {
+    "temperature": 22
+  }
+}

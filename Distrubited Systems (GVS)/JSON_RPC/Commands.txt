@@ -1,0 +1,26 @@
+127.0.0.1:8000/lights
+127.0.0.1:8000/light_change/livingRoom
+127.0.0.1:8000/light_change/kitchen
+
+http://127.0.0.1:8000/thermostat
+//adding devices
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"add_device\", \"params\": [{\"type\": \"light\", \"id\": \"bedroom\", \"status\": \"off\"}], \"id\": 1}"
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"add_device\", \"params\": [{\"type\": \"light\", \"id\": \"kitchen\", \"status\": \"on\"}], \"id\": 2}"
+//getting light status
+curl -X GET http://127.0.0.1:8000/lights
+//changing light status
+curl -X GET http://127.0.0.1:8000/light_change/bedroom
+//getting light status via POST/Curl
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"lights\", \"params\": [], \"id\": 1}"
+//changing light status via POST/Curl
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"light_change\", \"params\": [\"kitchen\"], \"id\": 1}"
+//getting Roomba status
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"get_roomba_status\", \"params\": [], \"id\": 1}"
+//starting Roomba
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"start_roomba\", \"params\": [], \"id\": 1}"
+//stops the server
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"stop_server\", \"params\": [], \"id\": 1}"
+//delete devices
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"delete_device\", \"params\": [\"bedroom\"], \"id\": 1}"
+//getting thermostat
+curl -X POST http://127.0.0.1:8000/json-rpc -H "Content-Type: application/json" -d "{\"jsonrpc\": \"2.0\", \"method\": \"get_thermostat_temperature\", \"params\": [], \"id\": 1}"

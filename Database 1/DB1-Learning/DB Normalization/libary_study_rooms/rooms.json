@@ -1,0 +1,20 @@
+[
+    {
+        "id": 1,
+        "name": "Room A",
+        "capacity": 4,
+        "features": ["whiteboard", "projector"]
+    },
+    {
+        "id": 2,
+        "name": "Room B",
+        "capacity": 8,
+        "features": ["whiteboard", "power outlets"]
+    },
+    {
+        "id": 3,
+        "name": "Room C",
+        "capacity": 2,
+        "features": ["quiet zone"]
+    }
+]

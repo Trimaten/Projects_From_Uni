@@ -1,0 +1,37 @@
+version: '3.9'
+
+services:
+  db:
+    image: postgres:15-alpine
+    container_name: music_platform_db
+    environment:
+      POSTGRES_USER: music_user
+      POSTGRES_PASSWORD: music_pass
+      POSTGRES_DB: music_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - db_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U music_user -d music_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  app:
+    build: .
+    container_name: music_platform_app
+    environment:
+      POSTGRES_USER: music_user
+      POSTGRES_PASSWORD: music_pass
+      POSTGRES_DB: music_db
+    depends_on:
+      db:
+        condition: service_healthy
+    command: ruby minitest.rb
+    volumes:
+      - .:/app
+    working_dir: /app
+
+volumes:
+  db_data:  # Ensure this volume is declared here

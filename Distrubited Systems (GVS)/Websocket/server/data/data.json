@@ -1,0 +1,26 @@
+{
+    "menuItems": [
+        { "name": "Pizza", "price": 10 },
+        {"name": "Pho", "price": 9},
+        {"name": "Banh Mi", "price": 8},
+        {"name": "Bun Bo Hue", "price": 11},
+        {"name": "Bun Rieu", "price": 10},
+        {"name": "Bun Bo Nam Bo", "price": 12},
+        {"name": "Bun Cha", "price": 10},
+        { "name": "Burger", "price": 5 },
+        { "name": "Salad", "price": 7 },
+        { "name": "Pasta", "price": 8 },
+        { "name": "Sandwich", "price": 6 },
+        { "name": "Soda", "price": 2 },
+        { "name": "Beer", "price": 4 },
+        { "name": "Wine", "price": 6 },
+        { "name": "Water", "price": 1 },
+        { "name": "Coffee", "price": 3 },
+        { "name": "Coffee without sugar", "price": 2 },
+        { "name": "Coffee with only sugar", "price": 2 },
+        {"name": "No Coffee with only sugar", "price": 2},
+        {"name" : "No Coffee with no sugar", "price": 10},
+        { "name": "Milk", "price": 2 },
+        { "name": "Tea", "price": 2 }
+    ]
+}

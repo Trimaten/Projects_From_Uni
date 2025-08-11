@@ -1,0 +1,26 @@
+[
+    {
+        "id": 1,
+        "roomId": 1,
+        "studentId": 1,
+        "startTime": "2024-11-25T10:00:00",
+        "endTime": "2024-11-25T12:00:00",
+        "checkedIn": true
+    },
+    {
+        "id": 2,
+        "roomId": 2,
+        "studentId": 2,
+        "startTime": "2024-11-25T14:00:00",
+        "endTime": "2024-11-25T16:00:00",
+        "checkedIn": false
+    },
+    {
+        "id": 3,
+        "roomId": 3,
+        "studentId": 3,
+        "startTime": "2024-11-26T09:00:00",
+        "endTime": "2024-11-26T10:00:00",
+        "checkedIn": true
+    }
+]

@@ -1,0 +1,40 @@
+erDiagram
+    Player {
+        int ID
+        string Name
+        integer Score
+    }
+
+    QuestionPool {
+        int ID
+        string Title
+        string Description
+    }
+
+    Question {
+        int ID
+        string Text
+        string CorrectAnswer
+        enum DifficultyLevel
+    }
+
+    Match {
+        int ID
+        datetime StartTime
+        datetime EndTime
+        integer Questions_Count
+    }
+
+    Match_Question {
+        int ID
+    }
+
+    Player_Match {
+        int ID
+    }
+
+    Player ||--o{ Player_Match : "participates in"
+    Match ||--o{ Player_Match : "has"
+    Match ||--|{ Match_Question : "contains"
+    QuestionPool ||--o{ Question : "includes"
+    Question ||--|{ Match_Question : "has"

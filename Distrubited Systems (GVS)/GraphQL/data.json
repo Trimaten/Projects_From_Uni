@@ -1,0 +1,77 @@
+{
+  "playlists": [
+    {
+      "id": "1",
+      "name": "My Playlist",
+      "songs": [
+        {
+          "id": "1",
+          "title": "Song 1",
+          "artist": "Artist 1",
+          "duration": 210,
+          "favorite": false
+        },
+        {
+          "id": "2",
+          "title": "Woaza",
+          "artist": "Me",
+          "duration": 2,
+          "favorite": false
+        },
+        {
+          "id": "3",
+          "title": "Under The Horizon",
+          "artist": "Lennard",
+          "duration": 2000,
+          "favorite": false
+        },
+        {
+          "id": "3",
+          "title": "Under The Horizon",
+          "artist": "Lennard",
+          "duration": 2000,
+          "favorite": false
+        },
+        {
+          "id": "4",
+          "title": "Frisch",
+          "artist": "Frosch",
+          "duration": 8,
+          "favorite": false
+        }
+      ],
+      "length": 4220,
+      "favorite": false
+    }
+  ],
+  "songs": [
+    {
+      "id": "1",
+      "title": "Song 1",
+      "artist": "Artist 1",
+      "duration": 210,
+      "favorite": false
+    },
+    {
+      "id": "2",
+      "title": "Woaza",
+      "artist": "Me",
+      "duration": 2,
+      "favorite": false
+    },
+    {
+      "id": "3",
+      "title": "Under The Horizon",
+      "artist": "Lennard",
+      "duration": 2000,
+      "favorite": false
+    },
+    {
+      "id": "4",
+      "title": "Frisch",
+      "artist": "Frosch",
+      "duration": 8,
+      "favorite": false
+    }
+  ]
+}

@@ -1,0 +1,36 @@
+services:
+  home_assistant:
+    image: lscr.io/linuxserver/homeassistant:latest
+    container_name: home_assistant
+    restart: unless-stopped
+    ports:
+      - "8124:8123"
+    cap_add:
+      - NET_ADMIN
+      - NET_RAW
+    volumes:
+      - ./home_assistant/config:/config  # Home Assistant config folder
+      - /var/run/dbus:/var/run/dbus:ro
+      - /etc/localtime:/etc/localtime:ro
+    environment:
+      - TZ=Europe/Berlin # Set your timezone here
+      - MQTT_HOST=localhost
+      - MQTT_PORT=1883
+      - MQTT_USERNAME=koti
+      - MQTT_PASSWORD=kot
+
+
+  mosquitto:
+    image: eclipse-mosquitto:latest
+    container_name: mosquitto
+    restart: always
+    ports:
+      - "1883:1883"   # MQTT port
+      - "9001:9001"   # WebSocket port (optional)
+    volumes:
+      - ./mosquitto/config:/mosquitto/config  # Mosquitto config folder
+      - ./mosquitto/data:/mosquitto/data      # Mosquitto data folder
+      - ./mosquitto/log:/mosquitto/log        # Mosquitto log folder
+    environment:
+      - TZ=Europe/Berlin # Set Mosquitto's timezone
+      

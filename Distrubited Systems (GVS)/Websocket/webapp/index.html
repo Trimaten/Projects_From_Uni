@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>WebSocket Order System</title>
+    <link rel="stylesheet" href="index.css" />
+    <!-- Link to your CSS file -->
+  </head>
+  <body>
+    <h1>WebSocket Order System</h1>
+    <div id="status">Status: Disconnected</div>
+    <!--<div id="client-count">Clients Connected: 0</div> -->
+
+    <!-- Container for Menu Items -->
+    <h2>Menu</h2>
+    <div id="menu-items">
+      <!-- Example of menu item structure (each item will be added dynamically with JavaScript) -->
+      <!-- This part is empty initially and will be populated by the JavaScript buildMenu function -->
+    </div>
+
+    <!-- Container for Client's Orders -->
+    <!-- Client view -->
+    <div id="client-view" style="display: none">
+      <h2>Your Orders</h2>
+      <p id="total-value">Total Order Value: $0</p>
+      <div id="client-orders"></div>
+    </div>
+
+    <!-- Owner view -->
+    <div id="owner-view" style="display: none">
+      <h2>Received Orders</h2>
+      <div id="received-orders" class="grid-container">
+        <!-- Each client column will have a total value at the top -->
+      </div>
+    </div>
+
+    <!-- Load client-side JavaScript -->
+    <script src="chat.js"></script>
+    <!-- Link to your JavaScript file -->
+  </body>
+</html>

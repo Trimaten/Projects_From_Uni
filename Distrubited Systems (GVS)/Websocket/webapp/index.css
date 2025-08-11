@@ -1,0 +1,182 @@
+/* General Reset */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* Body Styling */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f9;
+    color: #333;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+}
+
+/* Container for the menu items */
+#menu-items {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    gap: 20px;
+    width: 100%;
+    max-width: 800px;
+    margin: 20px 0;
+}
+
+/* Individual menu item styling */
+.menu-item {
+    border: 1px solid black;  /* Black outline */
+    padding: 15px;
+    text-align: center;
+    background-color: white;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s;
+}
+
+.menu-item:hover {
+    transform: scale(1.05);  /* Slightly enlarge on hover */
+}
+
+/* Item name and price */
+.menu-item p {
+    margin-bottom: 10px;
+    font-weight: bold;
+}
+
+/* Order Now button styling */
+.menu-item button {
+    padding: 10px 15px;
+    background-color: #4CAF50;  /* Green button */
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.menu-item button:hover {
+    background-color: #45a049;  /* Darker green on hover */
+}
+
+/* div with id "client-orders" styling */
+#client-orders {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px;
+    width: 100%; /* Ensure full width */
+    max-width: 1200px; /* Optional: Set max-width to control layout */
+    margin: 20px auto; /* Center the grid on the page */
+    align-items: start; /* Align columns at the top */
+}
+
+/* Client Order Card Styling */
+.order-card {
+    border: 1px solid black;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    text-align: left;
+    max-width: 200px;
+}
+
+/* Item and Status Styling */
+.order-card p {
+    margin: 8px 0;
+}
+
+/* Fulfillment Status Styling */
+.order-card .fulfilled {
+    color: red;
+    font-weight: bold;
+}
+
+.order-card .fulfilled.true {
+    color: green;
+}
+/* Container for all client columns */
+/* Full width for the grid container */
+.grid-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); /* Responsive columns */
+    gap: 20px;
+    width: 100%; /* Ensure full width */
+    max-width: 1200px; /* Optional: Set max-width to control layout */
+    margin: 20px auto; /* Center the grid on the page */
+    align-items: start; /* Align columns at the top */
+}
+
+/* Each client column */
+.client-column {
+    border: 1px solid #ddd;
+    padding: 15px;
+    background-color: #f9f9f9;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    width: 100%;
+}
+
+/* Client name header */
+.client-column h3 {
+    text-align: center;
+    color: #333;
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+/* Order card styling inside the client column */
+.order-card {
+    border: 1px solid black;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+    box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.1);
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+/* Item and Status Styling */
+.order-card p {
+    margin: 8px 0;
+}
+
+/* Fulfillment Status Styling */
+.order-card .fulfilled-status {
+    color: red;
+    font-weight: bold;
+}
+
+.order-card .fulfilled-status.true {
+    color: green;
+}
+
+/* Fulfill button styling */
+.order-card button {
+    padding: 10px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: 100%;
+}
+
+.order-card button:hover {
+    background-color: #45a049;
+}
+#total-value {
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.total-value {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}

@@ -1,0 +1,26 @@
+Access Pattern 
+
+- Question pools
+	Role: Player
+	Description: As an player, I want to view a list of all question pools, including their titles, descriptions, and the number of questions they contain.
+	Response: Returns a list of question pools with all datas for administrative overview.
+- Create a new match
+	Role: Player
+	Description: As an player, I want to create a new match by selecting a question pool and defining the number of rounds.
+	Response: Returns the details of the newly created match, including its unique ID, assigned question pool, and round settings.
+- Join a match
+	Role: Player
+	Description: As a player, I want to join an ongoing match using the match id.
+	Response: Returns match details such as the match ID, current round number, and participants.
+- Play a round
+	Role: Player
+	Description: As a player in an active match, I want to fetch the current questions and submit my answers.
+	Response: Returns a list of questions and confirms the submission of answers.
+- View leaderboard
+	Role: Player
+	Description: As a player, I want to view the leaderboard for my current match to see my ranking and compare my score with others.
+	Response: Returns a sorted leaderboard with player names, scores, and ranks.
+- Create new questions
+	Role: Player
+	Description: As an player, I want to create new questions for the question pool.
+	Response: Confirms the new question and gives a list back with details about the chosen questionpool such as question id, question and answer.

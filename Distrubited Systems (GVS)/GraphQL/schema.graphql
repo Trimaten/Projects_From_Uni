@@ -1,0 +1,32 @@
+# schema.graphql
+
+type Playlist {
+  id: ID!
+  name: String!
+  songs: [Song!]!
+  length: Int!
+  favorite: Boolean
+}
+
+type Song {
+  id: ID!
+  title: String!
+  artist: String!
+  duration: Int!
+  favorite: Boolean
+}
+
+type Query {
+  getPlaylist(id: ID!): Playlist
+  getAllPlaylists: [Playlist!]!
+  getArtistOfTrack(songId: ID!): String
+  getAllSongs: [Song!]!  # New query to get all songs
+}
+
+type Mutation {
+  createPlaylist(name: String!): Playlist!
+  addSongToPlaylist(playlistId: ID!, songId: ID!): Playlist!
+  setSongFavorite(songId: ID!, favorite: Boolean!): Song!
+  uploadSong(title: String!, artist: String!, duration: Int!): Song!
+  stopServer: String!
+}

@@ -1,0 +1,160 @@
+# Loads default set of integrations. Do not remove.
+default_config:
+
+# Load frontend themes from the themes folder
+frontend:
+  themes: !include_dir_merge_named themes
+
+# Include automations, scripts, and scenes
+automation: !include automations.yaml
+script: !include scripts.yaml
+scene: !include scenes.yaml
+
+# HTTP Configuration for reverse proxy or Cloudflare
+http:
+  use_x_forwarded_for: true
+  trusted_proxies:
+    - 127.0.0.1
+    - 192.168.178.79
+    - ::1
+
+
+# MQTT Configuration
+mqtt:
+  switch:
+    - name: "My Led Strip"
+      state_topic: "home/esp32/relay/state"
+      command_topic: "home/esp32/relay/set"
+      payload_on: "ON"
+      payload_off: "OFF"
+      state_on: "ON"
+      state_off: "OFF"
+      qos: 1
+      retain: true
+
+    - name: "LOFF/LON Switch"
+      state_topic: "home/esp32/relay/state"  # Topic to receive the state (LOFF or LON)
+      command_topic: "home/esp32/relay/set2"  # Topic to send commands (LOFF or LON)
+      payload_on: "LON"  # Payload to send when turning on
+      payload_off: "LOFF"  # Payload to send when turning off
+      state_on: "LON"  # State value that represents "on"
+      state_off: "LOFF"  # State value that represents "off"
+      qos: 1
+      retain: true
+
+# Input Text for Color Picker
+input_text:
+  color_picker:
+    name: Color Picker
+    initial: "FFFFFF"  # Default value, ensures the field is never empty
+    min: 6             # Minimum length of 6 characters
+    max: 6             # Maximum length of 6 characters
+    pattern: "^[0-9A-F]{6}$"  # Only allows 6 characters of 0-9 and A-F (uppercase only)
+
+# Input Number for Slider and Number of Turns
+input_number:
+  number_field:
+    name: Number of Turns
+    initial: 0       # Start at 0
+    min: -12         # Minimum value
+    max: 12          # Maximum value
+    step: 1          # Step size (whole numbers only)
+    mode: slider     # Display as a slider in the UI
+
+  slider_value:
+    name: Motor Speed
+    initial: 5       # Default value (midpoint of 1-10)
+    min: 1           # Minimum value
+    max: 10          # Maximum value
+    step: 1          # Step size (whole numbers only)
+    mode: slider     # Display as a slider in the UI
+
+# Input Buttons
+input_button:
+  send_mon_button:
+    name: Send mON
+
+  send_sbn_button:  # Corrected slug
+    name: Send sON
+
+# Automations
+automation:
+  - alias: Send Color or Slider via MQTT
+    trigger:
+      - platform: state
+        entity_id: input_text.color_picker
+      - platform: state
+        entity_id: input_number.slider_value
+    action:
+      - choose:
+          - conditions: "{{ trigger.entity_id == 'input_text.color_picker' }}"
+            sequence:
+              - service: mqtt.publish
+                data:
+                  topic: "home/esp32/relay/set"
+                  payload: "#{{ states('input_text.color_picker') }}"  # Add the hashtag for color
+                  qos: 1
+                  retain: true
+          - conditions: "{{ trigger.entity_id == 'input_number.slider_value' }}"
+            sequence:
+              - service: mqtt.publish
+                data:
+                  topic: "home/esp32/relay/set"
+                  payload: "s{{ states('input_number.slider_value') | int }}"  # Add 's' for slider
+                  qos: 1
+                  retain: true
+  - alias: "Send LON or LOFF based on switch state"
+    trigger:
+      - platform: state
+        entity_id: switch.loff_lon_switch  # Replace with the actual entity ID of your switch
+    action:
+      - choose:
+          - conditions: "{{ trigger.to_state.state == 'on' }}"
+            sequence:
+              - service: mqtt.publish
+                data:
+                  topic: "home/esp32/relay/set2"
+                  payload: "LON"  # Send LON when the switch is turned on
+                  qos: 1
+                  retain: true
+          - conditions: "{{ trigger.to_state.state == 'off' }}"
+            sequence:
+              - service: mqtt.publish
+                data:
+                  topic: "home/esp32/relay/set2"
+                  payload: "LOFF"  # Send LOFF when the switch is turned off
+                  qos: 1
+                  retain: true
+  - alias: Send mON and Number of Turns on Button Press
+    trigger:
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: input_button
+          service: press
+          service_data:
+            entity_id: input_button.send_mon_button
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "home/esp32/relay/set"
+          payload: "MON{{ states('input_number.number_field') | int }}"  # Send 'MON' and the number of turns
+          qos: 1
+          retain: true
+
+  - alias: Send sON on Button Press
+    trigger:
+      - platform: event
+        event_type: call_service
+        event_data:
+          domain: input_button
+          service: press
+          service_data:
+            entity_id: input_button.send_sbn_button
+    action:
+      - service: mqtt.publish
+        data:
+          topic: "home/esp32/relay/set"
+          payload: "AON"  # Send 'sON'
+          qos: 1
+          retain: true

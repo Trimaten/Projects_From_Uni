@@ -1,0 +1,920 @@
+{
+  "version": 1,
+  "minor_version": 1,
+  "key": "trace.saved_traces",
+  "data": {
+    "automation.None": [
+      {
+        "extended_dict": {
+          "last_step": "action/0/choose/1/conditions/0",
+          "run_id": "eab977b2025dc396445679575e8b48ed",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:10:46.927511+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of switch.loff_lon_switch",
+          "trace": {
+            "trigger/0": [
+              {
+                "path": "trigger/0",
+                "timestamp": "2025-01-19T11:10:46.927540+00:00",
+                "changed_variables": {
+                  "this": {
+                    "entity_id": "automation.send_lon_or_loff_based_on_switch_state",
+                    "state": "on",
+                    "attributes": {
+                      "last_triggered": null,
+                      "mode": "single",
+                      "current": 0,
+                      "friendly_name": "Send LON or LOFF based on switch state"
+                    },
+                    "last_changed": "2025-01-19T11:08:58.178788+00:00",
+                    "last_reported": "2025-01-19T11:08:58.178788+00:00",
+                    "last_updated": "2025-01-19T11:08:58.178788+00:00",
+                    "context": {
+                      "id": "01JHZ40TE2QETRSJW1FN47845V",
+                      "parent_id": null,
+                      "user_id": null
+                    }
+                  },
+                  "trigger": {
+                    "id": "0",
+                    "idx": "0",
+                    "alias": null,
+                    "platform": "state",
+                    "entity_id": "switch.loff_lon_switch",
+                    "from_state": null,
+                    "to_state": {
+                      "entity_id": "switch.loff_lon_switch",
+                      "state": "unknown",
+                      "attributes": {
+                        "friendly_name": "LOFF/LON Switch"
+                      },
+                      "last_changed": "2025-01-19T11:10:46.927366+00:00",
+                      "last_reported": "2025-01-19T11:10:46.927366+00:00",
+                      "last_updated": "2025-01-19T11:10:46.927366+00:00",
+                      "context": {
+                        "id": "01JHZ444MF12XV05MKXPRQ32N0",
+                        "parent_id": null,
+                        "user_id": null
+                      }
+                    },
+                    "for": null,
+                    "attribute": null,
+                    "description": "state of switch.loff_lon_switch"
+                  }
+                }
+              }
+            ],
+            "action/0": [
+              {
+                "path": "action/0",
+                "timestamp": "2025-01-19T11:10:46.927645+00:00",
+                "changed_variables": {
+                  "context": {
+                    "id": "01JHZ444MFESZTDYE09FR2V740",
+                    "parent_id": "01JHZ444MF12XV05MKXPRQ32N0",
+                    "user_id": null
+                  }
+                }
+              }
+            ],
+            "action/0/choose/0": [
+              {
+                "path": "action/0/choose/0",
+                "timestamp": "2025-01-19T11:10:46.927729+00:00",
+                "result": {
+                  "result": false
+                }
+              }
+            ],
+            "action/0/choose/0/conditions/0": [
+              {
+                "path": "action/0/choose/0/conditions/0",
+                "timestamp": "2025-01-19T11:10:46.927740+00:00",
+                "result": {
+                  "result": false,
+                  "entities": []
+                }
+              }
+            ],
+            "action/0/choose/1": [
+              {
+                "path": "action/0/choose/1",
+                "timestamp": "2025-01-19T11:10:46.928124+00:00",
+                "result": {
+                  "result": false
+                }
+              }
+            ],
+            "action/0/choose/1/conditions/0": [
+              {
+                "path": "action/0/choose/1/conditions/0",
+                "timestamp": "2025-01-19T11:10:46.928135+00:00",
+                "result": {
+                  "result": false,
+                  "entities": []
+                }
+              }
+            ]
+          },
+          "config": {
+            "alias": "Send LON or LOFF based on switch state",
+            "trigger": [
+              {
+                "platform": "state",
+                "entity_id": "switch.loff_lon_switch"
+              }
+            ],
+            "action": [
+              {
+                "choose": [
+                  {
+                    "conditions": "{{ trigger.to_state.state == 'on' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set2",
+                          "payload": "LON",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  },
+                  {
+                    "conditions": "{{ trigger.to_state.state == 'off' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set2",
+                          "payload": "LOFF",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "blueprint_inputs": null,
+          "context": {
+            "id": "01JHZ444MFESZTDYE09FR2V740",
+            "parent_id": "01JHZ444MF12XV05MKXPRQ32N0",
+            "user_id": null
+          }
+        },
+        "short_dict": {
+          "last_step": "action/0/choose/1/conditions/0",
+          "run_id": "eab977b2025dc396445679575e8b48ed",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:10:46.927511+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of switch.loff_lon_switch"
+        }
+      },
+      {
+        "extended_dict": {
+          "last_step": "action/0/choose/1/sequence/0",
+          "run_id": "0a0ac9c16a48c24515773ec366322127",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:45.925295+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of input_number.slider_value",
+          "trace": {
+            "trigger/1": [
+              {
+                "path": "trigger/1",
+                "timestamp": "2025-01-19T11:22:45.925330+00:00",
+                "changed_variables": {
+                  "this": {
+                    "entity_id": "automation.send_color_or_slider_via_mqtt",
+                    "state": "on",
+                    "attributes": {
+                      "last_triggered": null,
+                      "mode": "single",
+                      "current": 0,
+                      "friendly_name": "Send Color or Slider via MQTT"
+                    },
+                    "last_changed": "2025-01-19T11:08:58.178683+00:00",
+                    "last_reported": "2025-01-19T11:08:58.178683+00:00",
+                    "last_updated": "2025-01-19T11:08:58.178683+00:00",
+                    "context": {
+                      "id": "01JHZ40TE2XKQ1Z01XW493XMZY",
+                      "parent_id": null,
+                      "user_id": null
+                    }
+                  },
+                  "trigger": {
+                    "id": "1",
+                    "idx": "1",
+                    "alias": null,
+                    "platform": "state",
+                    "entity_id": "input_number.slider_value",
+                    "from_state": {
+                      "entity_id": "input_number.slider_value",
+                      "state": "5.0",
+                      "attributes": {
+                        "initial": 5.0,
+                        "editable": false,
+                        "min": 1.0,
+                        "max": 10.0,
+                        "step": 1.0,
+                        "mode": "slider",
+                        "friendly_name": "Motor Speed"
+                      },
+                      "last_changed": "2025-01-19T11:08:57.916518+00:00",
+                      "last_reported": "2025-01-19T11:08:57.916518+00:00",
+                      "last_updated": "2025-01-19T11:08:57.916518+00:00",
+                      "context": {
+                        "id": "01JHZ40T5WB6TK0R09M147ZBQS",
+                        "parent_id": null,
+                        "user_id": null
+                      }
+                    },
+                    "to_state": {
+                      "entity_id": "input_number.slider_value",
+                      "state": "10.0",
+                      "attributes": {
+                        "initial": 5.0,
+                        "editable": false,
+                        "min": 1.0,
+                        "max": 10.0,
+                        "step": 1.0,
+                        "mode": "slider",
+                        "friendly_name": "Motor Speed"
+                      },
+                      "last_changed": "2025-01-19T11:22:45.925104+00:00",
+                      "last_reported": "2025-01-19T11:22:45.925104+00:00",
+                      "last_updated": "2025-01-19T11:22:45.925104+00:00",
+                      "context": {
+                        "id": "01JHZ4T2S4RSBT79PSPYN88A2C",
+                        "parent_id": null,
+                        "user_id": "1acc231db705465880e796e0b56da4ba"
+                      }
+                    },
+                    "for": null,
+                    "attribute": null,
+                    "description": "state of input_number.slider_value"
+                  }
+                }
+              }
+            ],
+            "action/0": [
+              {
+                "path": "action/0",
+                "timestamp": "2025-01-19T11:22:45.925464+00:00",
+                "changed_variables": {
+                  "context": {
+                    "id": "01JHZ4T2S5501GT6AT54NW3M2H",
+                    "parent_id": "01JHZ4T2S4RSBT79PSPYN88A2C",
+                    "user_id": null
+                  }
+                },
+                "result": {
+                  "choice": 1
+                }
+              }
+            ],
+            "action/0/choose/0": [
+              {
+                "path": "action/0/choose/0",
+                "timestamp": "2025-01-19T11:22:45.925561+00:00",
+                "result": {
+                  "result": false
+                }
+              }
+            ],
+            "action/0/choose/0/conditions/0": [
+              {
+                "path": "action/0/choose/0/conditions/0",
+                "timestamp": "2025-01-19T11:22:45.925572+00:00",
+                "result": {
+                  "result": false,
+                  "entities": []
+                }
+              }
+            ],
+            "action/0/choose/1": [
+              {
+                "path": "action/0/choose/1",
+                "timestamp": "2025-01-19T11:22:45.925682+00:00",
+                "result": {
+                  "result": true
+                }
+              }
+            ],
+            "action/0/choose/1/conditions/0": [
+              {
+                "path": "action/0/choose/1/conditions/0",
+                "timestamp": "2025-01-19T11:22:45.925691+00:00",
+                "result": {
+                  "result": true,
+                  "entities": []
+                }
+              }
+            ],
+            "action/0/choose/1/sequence/0": [
+              {
+                "path": "action/0/choose/1/sequence/0",
+                "timestamp": "2025-01-19T11:22:45.925826+00:00",
+                "result": {
+                  "params": {
+                    "domain": "mqtt",
+                    "service": "publish",
+                    "service_data": {
+                      "topic": "home/esp32/relay/set",
+                      "payload": "s10",
+                      "qos": 1,
+                      "retain": true
+                    },
+                    "target": {}
+                  },
+                  "running_script": false
+                }
+              }
+            ]
+          },
+          "config": {
+            "alias": "Send Color or Slider via MQTT",
+            "trigger": [
+              {
+                "platform": "state",
+                "entity_id": "input_text.color_picker"
+              },
+              {
+                "platform": "state",
+                "entity_id": "input_number.slider_value"
+              }
+            ],
+            "action": [
+              {
+                "choose": [
+                  {
+                    "conditions": "{{ trigger.entity_id == 'input_text.color_picker' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set",
+                          "payload": "#{{ states('input_text.color_picker') }}",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  },
+                  {
+                    "conditions": "{{ trigger.entity_id == 'input_number.slider_value' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set",
+                          "payload": "s{{ states('input_number.slider_value') | int }}",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "blueprint_inputs": null,
+          "context": {
+            "id": "01JHZ4T2S5501GT6AT54NW3M2H",
+            "parent_id": "01JHZ4T2S4RSBT79PSPYN88A2C",
+            "user_id": null
+          }
+        },
+        "short_dict": {
+          "last_step": "action/0/choose/1/sequence/0",
+          "run_id": "0a0ac9c16a48c24515773ec366322127",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:45.925295+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of input_number.slider_value"
+        }
+      },
+      {
+        "extended_dict": {
+          "last_step": "action/0/choose/0/sequence/0",
+          "run_id": "b10e23bb0a12ecb52884b270e42e1409",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:51.552074+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of input_text.color_picker",
+          "trace": {
+            "trigger/0": [
+              {
+                "path": "trigger/0",
+                "timestamp": "2025-01-19T11:22:51.552115+00:00",
+                "changed_variables": {
+                  "this": {
+                    "entity_id": "automation.send_color_or_slider_via_mqtt",
+                    "state": "on",
+                    "attributes": {
+                      "last_triggered": "2025-01-19T11:22:45.925372+00:00",
+                      "mode": "single",
+                      "current": 0,
+                      "friendly_name": "Send Color or Slider via MQTT"
+                    },
+                    "last_changed": "2025-01-19T11:08:58.178683+00:00",
+                    "last_reported": "2025-01-19T11:22:45.927752+00:00",
+                    "last_updated": "2025-01-19T11:22:45.927752+00:00",
+                    "context": {
+                      "id": "01JHZ4T2S5501GT6AT54NW3M2H",
+                      "parent_id": "01JHZ4T2S4RSBT79PSPYN88A2C",
+                      "user_id": null
+                    }
+                  },
+                  "trigger": {
+                    "id": "0",
+                    "idx": "0",
+                    "alias": null,
+                    "platform": "state",
+                    "entity_id": "input_text.color_picker",
+                    "from_state": {
+                      "entity_id": "input_text.color_picker",
+                      "state": "FFFFFF",
+                      "attributes": {
+                        "editable": false,
+                        "min": 6,
+                        "max": 6,
+                        "pattern": "^[0-9A-F]{6}$",
+                        "mode": "text",
+                        "friendly_name": "Color Picker"
+                      },
+                      "last_changed": "2025-01-19T11:08:58.027673+00:00",
+                      "last_reported": "2025-01-19T11:08:58.027673+00:00",
+                      "last_updated": "2025-01-19T11:08:58.027673+00:00",
+                      "context": {
+                        "id": "01JHZ40T9BMMADKGWE4A5BMH51",
+                        "parent_id": null,
+                        "user_id": null
+                      }
+                    },
+                    "to_state": {
+                      "entity_id": "input_text.color_picker",
+                      "state": "FF1100",
+                      "attributes": {
+                        "editable": false,
+                        "min": 6,
+                        "max": 6,
+                        "pattern": "^[0-9A-F]{6}$",
+                        "mode": "text",
+                        "friendly_name": "Color Picker"
+                      },
+                      "last_changed": "2025-01-19T11:22:51.551920+00:00",
+                      "last_reported": "2025-01-19T11:22:51.551920+00:00",
+                      "last_updated": "2025-01-19T11:22:51.551920+00:00",
+                      "context": {
+                        "id": "01JHZ4T88Z84PZH7YC5M56RE45",
+                        "parent_id": null,
+                        "user_id": "1acc231db705465880e796e0b56da4ba"
+                      }
+                    },
+                    "for": null,
+                    "attribute": null,
+                    "description": "state of input_text.color_picker"
+                  }
+                }
+              }
+            ],
+            "action/0": [
+              {
+                "path": "action/0",
+                "timestamp": "2025-01-19T11:22:51.552211+00:00",
+                "changed_variables": {
+                  "context": {
+                    "id": "01JHZ4T890KZEKRWBH00EMYR2F",
+                    "parent_id": "01JHZ4T88Z84PZH7YC5M56RE45",
+                    "user_id": null
+                  }
+                },
+                "result": {
+                  "choice": 0
+                }
+              }
+            ],
+            "action/0/choose/0": [
+              {
+                "path": "action/0/choose/0",
+                "timestamp": "2025-01-19T11:22:51.552247+00:00",
+                "result": {
+                  "result": true
+                }
+              }
+            ],
+            "action/0/choose/0/conditions/0": [
+              {
+                "path": "action/0/choose/0/conditions/0",
+                "timestamp": "2025-01-19T11:22:51.552258+00:00",
+                "result": {
+                  "result": true,
+                  "entities": []
+                }
+              }
+            ],
+            "action/0/choose/0/sequence/0": [
+              {
+                "path": "action/0/choose/0/sequence/0",
+                "timestamp": "2025-01-19T11:22:51.552385+00:00",
+                "result": {
+                  "params": {
+                    "domain": "mqtt",
+                    "service": "publish",
+                    "service_data": {
+                      "topic": "home/esp32/relay/set",
+                      "payload": "#FF1100",
+                      "qos": 1,
+                      "retain": true
+                    },
+                    "target": {}
+                  },
+                  "running_script": false
+                }
+              }
+            ]
+          },
+          "config": {
+            "alias": "Send Color or Slider via MQTT",
+            "trigger": [
+              {
+                "platform": "state",
+                "entity_id": "input_text.color_picker"
+              },
+              {
+                "platform": "state",
+                "entity_id": "input_number.slider_value"
+              }
+            ],
+            "action": [
+              {
+                "choose": [
+                  {
+                    "conditions": "{{ trigger.entity_id == 'input_text.color_picker' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set",
+                          "payload": "#{{ states('input_text.color_picker') }}",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  },
+                  {
+                    "conditions": "{{ trigger.entity_id == 'input_number.slider_value' }}",
+                    "sequence": [
+                      {
+                        "data": {
+                          "topic": "home/esp32/relay/set",
+                          "payload": "s{{ states('input_number.slider_value') | int }}",
+                          "qos": 1,
+                          "retain": true
+                        },
+                        "action": "mqtt.publish"
+                      }
+                    ]
+                  }
+                ]
+              }
+            ]
+          },
+          "blueprint_inputs": null,
+          "context": {
+            "id": "01JHZ4T890KZEKRWBH00EMYR2F",
+            "parent_id": "01JHZ4T88Z84PZH7YC5M56RE45",
+            "user_id": null
+          }
+        },
+        "short_dict": {
+          "last_step": "action/0/choose/0/sequence/0",
+          "run_id": "b10e23bb0a12ecb52884b270e42e1409",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:51.552074+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "state of input_text.color_picker"
+        }
+      },
+      {
+        "extended_dict": {
+          "last_step": "action/0",
+          "run_id": "61bb6e4f12a54fbdf6ed4f19e2b39a19",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:53.840504+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "event 'call_service'",
+          "trace": {
+            "trigger/0": [
+              {
+                "path": "trigger/0",
+                "timestamp": "2025-01-19T11:22:53.840525+00:00",
+                "changed_variables": {
+                  "this": {
+                    "entity_id": "automation.send_mon_and_number_of_turns_on_button_press",
+                    "state": "on",
+                    "attributes": {
+                      "last_triggered": null,
+                      "mode": "single",
+                      "current": 0,
+                      "friendly_name": "Send mON and Number of Turns on Button Press"
+                    },
+                    "last_changed": "2025-01-19T11:08:58.178859+00:00",
+                    "last_reported": "2025-01-19T11:08:58.178859+00:00",
+                    "last_updated": "2025-01-19T11:08:58.178859+00:00",
+                    "context": {
+                      "id": "01JHZ40TE252WVZM1YXDG68H81",
+                      "parent_id": null,
+                      "user_id": null
+                    }
+                  },
+                  "trigger": {
+                    "id": "0",
+                    "idx": "0",
+                    "alias": null,
+                    "platform": "event",
+                    "event": {
+                      "event_type": "call_service",
+                      "data": {
+                        "domain": "input_button",
+                        "service": "press",
+                        "service_data": {
+                          "entity_id": "input_button.send_mon_button"
+                        }
+                      },
+                      "origin": "LOCAL",
+                      "time_fired": "2025-01-19T11:22:53.840177+00:00",
+                      "context": {
+                        "id": "01JHZ4TAGGFQ7M888Q4C9YAR31",
+                        "parent_id": null,
+                        "user_id": "1acc231db705465880e796e0b56da4ba"
+                      }
+                    },
+                    "description": "event 'call_service'"
+                  }
+                }
+              }
+            ],
+            "action/0": [
+              {
+                "path": "action/0",
+                "timestamp": "2025-01-19T11:22:53.840625+00:00",
+                "changed_variables": {
+                  "context": {
+                    "id": "01JHZ4TAGGF959RQ7TNECYZ705",
+                    "parent_id": "01JHZ4TAGGFQ7M888Q4C9YAR31",
+                    "user_id": null
+                  }
+                },
+                "result": {
+                  "params": {
+                    "domain": "mqtt",
+                    "service": "publish",
+                    "service_data": {
+                      "topic": "home/esp32/relay/set",
+                      "payload": "MON0",
+                      "qos": 1,
+                      "retain": true
+                    },
+                    "target": {}
+                  },
+                  "running_script": false
+                }
+              }
+            ]
+          },
+          "config": {
+            "alias": "Send mON and Number of Turns on Button Press",
+            "trigger": [
+              {
+                "platform": "event",
+                "event_type": "call_service",
+                "event_data": {
+                  "domain": "input_button",
+                  "service": "press",
+                  "service_data": {
+                    "entity_id": "input_button.send_mon_button"
+                  }
+                }
+              }
+            ],
+            "action": [
+              {
+                "data": {
+                  "topic": "home/esp32/relay/set",
+                  "payload": "MON{{ states('input_number.number_field') | int }}",
+                  "qos": 1,
+                  "retain": true
+                },
+                "action": "mqtt.publish"
+              }
+            ]
+          },
+          "blueprint_inputs": null,
+          "context": {
+            "id": "01JHZ4TAGGF959RQ7TNECYZ705",
+            "parent_id": "01JHZ4TAGGFQ7M888Q4C9YAR31",
+            "user_id": null
+          }
+        },
+        "short_dict": {
+          "last_step": "action/0",
+          "run_id": "61bb6e4f12a54fbdf6ed4f19e2b39a19",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:53.840504+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "event 'call_service'"
+        }
+      },
+      {
+        "extended_dict": {
+          "last_step": "action/0",
+          "run_id": "01fc20b0663c9a2c470b0511dd886009",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:55.244522+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "event 'call_service'",
+          "trace": {
+            "trigger/0": [
+              {
+                "path": "trigger/0",
+                "timestamp": "2025-01-19T11:22:55.244544+00:00",
+                "changed_variables": {
+                  "this": {
+                    "entity_id": "automation.send_son_on_button_press",
+                    "state": "on",
+                    "attributes": {
+                      "last_triggered": null,
+                      "mode": "single",
+                      "current": 0,
+                      "friendly_name": "Send sON on Button Press"
+                    },
+                    "last_changed": "2025-01-19T11:08:58.178915+00:00",
+                    "last_reported": "2025-01-19T11:08:58.178915+00:00",
+                    "last_updated": "2025-01-19T11:08:58.178915+00:00",
+                    "context": {
+                      "id": "01JHZ40TE2HJZP0MR3VAGMJ5GB",
+                      "parent_id": null,
+                      "user_id": null
+                    }
+                  },
+                  "trigger": {
+                    "id": "0",
+                    "idx": "0",
+                    "alias": null,
+                    "platform": "event",
+                    "event": {
+                      "event_type": "call_service",
+                      "data": {
+                        "domain": "input_button",
+                        "service": "press",
+                        "service_data": {
+                          "entity_id": "input_button.send_sbn_button"
+                        }
+                      },
+                      "origin": "LOCAL",
+                      "time_fired": "2025-01-19T11:22:55.244243+00:00",
+                      "context": {
+                        "id": "01JHZ4TBWCP6VCMHFQ3A1EHDSF",
+                        "parent_id": null,
+                        "user_id": "1acc231db705465880e796e0b56da4ba"
+                      }
+                    },
+                    "description": "event 'call_service'"
+                  }
+                }
+              }
+            ],
+            "action/0": [
+              {
+                "path": "action/0",
+                "timestamp": "2025-01-19T11:22:55.244662+00:00",
+                "changed_variables": {
+                  "context": {
+                    "id": "01JHZ4TBWCWCA6DPV7QN6B11R8",
+                    "parent_id": "01JHZ4TBWCP6VCMHFQ3A1EHDSF",
+                    "user_id": null
+                  }
+                },
+                "result": {
+                  "params": {
+                    "domain": "mqtt",
+                    "service": "publish",
+                    "service_data": {
+                      "topic": "home/esp32/relay/set",
+                      "payload": "AON",
+                      "qos": 1,
+                      "retain": true
+                    },
+                    "target": {}
+                  },
+                  "running_script": false
+                }
+              }
+            ]
+          },
+          "config": {
+            "alias": "Send sON on Button Press",
+            "trigger": [
+              {
+                "platform": "event",
+                "event_type": "call_service",
+                "event_data": {
+                  "domain": "input_button",
+                  "service": "press",
+                  "service_data": {
+                    "entity_id": "input_button.send_sbn_button"
+                  }
+                }
+              }
+            ],
+            "action": [
+              {
+                "data": {
+                  "topic": "home/esp32/relay/set",
+                  "payload": "AON",
+                  "qos": 1,
+                  "retain": true
+                },
+                "action": "mqtt.publish"
+              }
+            ]
+          },
+          "blueprint_inputs": null,
+          "context": {
+            "id": "01JHZ4TBWCWCA6DPV7QN6B11R8",
+            "parent_id": "01JHZ4TBWCP6VCMHFQ3A1EHDSF",
+            "user_id": null
+          }
+        },
+        "short_dict": {
+          "last_step": "action/0",
+          "run_id": "01fc20b0663c9a2c470b0511dd886009",
+          "state": "running",
+          "script_execution": null,
+          "timestamp": {
+            "start": "2025-01-19T11:22:55.244522+00:00",
+            "finish": null
+          },
+          "domain": "automation",
+          "item_id": "None",
+          "trigger": "event 'call_service'"
+        }
+      }
+    ]
+  }
+}

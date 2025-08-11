@@ -1,0 +1,39 @@
+services:
+  app:
+    build: .
+    ports:
+      - "127.0.0.1:3000:3000"
+    volumes:
+      - "./:/app"
+    depends_on:
+      postgres:
+        condition: service_healthy
+    environment:
+      DATABASE_HOST: postgres
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: password
+      DATABASE_NAME: my_app_development
+    command: >
+      sh -c "rails db:setup &&
+             rails db:migrate &&
+             rails test && 
+             rails server -b 0.0.0.0"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/up"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  postgres:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: database
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
