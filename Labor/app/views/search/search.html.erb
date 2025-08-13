@@ -1,0 +1,30 @@
+<div class="flex justify-center bg-white w-screen px-4 py-8">
+  <div class="w-full max-w-2xl">
+    <h1 class="text-3xl font-bold text-center text-gray-900 mb-4">Search Results</h1>
+
+    <% if @workflow_search_results.any? %>
+      <ul class="space-y-4">
+        <% @workflow_search_results.each do |result| %>
+          <li class="p-4 border rounded border-gray-300 shadow-sm bg-gray-50">
+            <p class="text-lg font-semibold text-gray-800">
+              <%# ==================================================================== %>
+              <%# NEW LOGIC: Conditional link based on participation status %>
+              <%# Ensure current_user is logged in before checking Participant.exists? %>
+              <% if current_user && Participant.exists?(user_id: current_user.id, workflow_id: result.id) %>
+                <%# If user is a participant, link to their progress/dashboard for this workflow %>
+                <%= link_to result.title, workflow_progress_path(result) %>
+                <span class="text-xs text-gray-500 ml-2">(Already Joined - View Progress)</span>
+              <% else %>
+                <%# If user is NOT a participant, link to the workflow overview %>
+                <%= link_to result.title, workflow_overview_path(result) %>
+              <% end %>
+              <%# ==================================================================== %>
+            </p>
+          </li>
+        <% end %>
+      </ul>
+    <% else %>
+      <p class="text-center text-gray-500">No results found.</p>
+    <% end %>
+  </div>
+</div>

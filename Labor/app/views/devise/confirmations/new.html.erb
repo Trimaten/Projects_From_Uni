@@ -1,0 +1,39 @@
+<div class="min-h-screen w-screen bg-gradient-to-r from-purple-500 to-indigo-600 flex flex-col justify-center py-12 px-4 sm:px-6 lg:px-8">
+  <div class="sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="flex justify-center items-center mb-6">
+      <div class="w-12 h-12 rounded-full bg-white text-indigo-500 flex items-center justify-center">
+        <%# Assuming you have wave.png in your assets and want to use it here %>
+        <%= image_tag "wave.png", alt: "Logo", class: "h-8 w-8" %>
+      </div>
+    </div>
+    <h2 class="mt-6 text-center text-3xl font-extrabold text-white">
+      Resend confirmation instructions
+    </h2>
+    <p class="mt-2 text-center text-sm text-gray-200">
+      Enter your email to resend instructions
+    </p>
+  </div>
+
+  <div class="mt-8 sm:mx-auto sm:w-full sm:max-w-md">
+    <div class="bg-white py-8 px-4 shadow sm:rounded-lg sm:px-10">
+      <%= form_for(resource, as: resource_name, url: confirmation_path(resource_name), html: { method: :post, class: "space-y-6" }) do |f| %>
+        <%= render "devise/shared/error_messages", resource: resource %>
+
+        <div>
+          <%= f.label :email, class: "block text-sm font-medium text-gray-700" %>
+          <div class="mt-1">
+            <%= f.email_field :email, autofocus: true, autocomplete: "email", value: (resource.pending_reconfirmation? ? resource.unconfirmed_email : resource.email), class: "shadow-sm focus:ring-indigo-500 focus:border-indigo-500 block w-full sm:text-sm border-gray-300 rounded-md" %>
+          </div>
+        </div>
+
+        <div class="actions">
+          <%= f.submit "Resend confirmation instructions", class: "w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 cursor-pointer" %>
+        </div>
+      <% end %>
+
+      <div class="mt-6 text-center text-sm text-gray-600">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </div>
+</div>

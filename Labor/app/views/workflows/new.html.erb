@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create New Workflow</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts - Inter -->
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Google Material Symbols Outlined -->
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200" />
+  <style>
+      body {
+          font-family: 'Inter', sans-serif;
+      }
+      /* Custom styles for the radio buttons as seen in the image */
+      .custom-radio-label {
+          display: flex;
+          align-items: flex-start; /* Align content to the start vertically */
+          padding: 1rem;
+          border-radius: 0.5rem;
+          border: 1px solid #e5e7eb; /* Light gray border for light background */
+          background-color: #ffffff; /* White background */
+          color: #1f2937; /* Dark text */
+          cursor: pointer;
+          transition: all 0.2s ease-in-out;
+          box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px 0 rgba(0, 0, 0, 0.06);
+      }
+      .custom-radio-label:hover {
+          border-color: #cbd5e0; /* Slightly darker on hover */
+          background-color: #f9fafb; /* Slightly lighter on hover */
+      }
+      .custom-radio-label input[type="radio"] {
+          display: none; /* Hide the default radio button */
+      }
+      .custom-radio-label .radio-icon-wrapper {
+          margin-right: 0.75rem;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0; /* Prevent icon from shrinking */
+      }
+      .custom-radio-label .radio-dot {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 1.25rem;
+          height: 1.25rem;
+          border-radius: 50%;
+          border: 2px solid #6b7280; /* Gray border for unchecked */
+          transition: all 0.2s ease-in-out;
+          margin-right: 0.5rem; /* Space between dot and Material icon */
+      }
+      .custom-radio-label input[type="radio"]:checked + .radio-icon-wrapper .radio-dot {
+          background-color: #4f46e5; /* Indigo-600 for checked */
+          border-color: #4f46e5; /* Indigo-600 border for checked */
+      }
+      .custom-radio-label input[type="radio"]:checked + .radio-icon-wrapper .radio-dot::after {
+          content: '';
+          display: block;
+          width: 0.5rem;
+          height: 0.5rem;
+          border-radius: 50%;
+          background-color: #fff; /* White dot inside checked radio */
+      }
+      .custom-radio-label .material-symbols-outlined {
+          font-size: 1.5rem; /* Size for Material Symbols */
+          color: #4f46e5; /* Indigo-600 for icons */
+          line-height: 1; /* Adjust line height for alignment */
+      }
+      .custom-radio-label .radio-content {
+          flex-grow: 1;
+      }
+      .custom-radio-label .radio-content .title {
+          font-weight: 600;
+          margin-bottom: 0.25rem;
+          color: #1f2937; /* Darker text for titles */
+      }
+      .custom-radio-label .radio-content .description {
+          font-size: 0.875rem;
+          color: #6b7280; /* Gray for description */
+      }
+  </style>
+</head>
+<body class="font-inter">
+<div class="flex items-center justify-center min-h-screen bg-gray-100 w-screen text-gray-900">
+  <div class="w-full max-w-2xl px-4 py-8">
+    <h2 class="text-3xl font-bold text-center text-gray-900 mb-2">Create a new Workflow</h2>
+    <p class="text-center text-gray-500 mb-2">
+      Here you will create a workflow which will be sent to other users
+    </p>
+    <p class="text-center text-xs italic text-gray-500 mb-6">
+      Required fields are marked with an asterisk
+    </p>
+
+    <%= form_with(model: @workflow, local: true, html: {class: "bg-white p-8 rounded-lg shadow-xl"}) do |form| %>
+      <% if @workflow.errors.any? %>
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-4">
+          <strong class="font-bold">Error:</strong>
+          <ul class="mt-2 list-disc list-inside">
+            <% @workflow.errors.full_messages.each do |message| %>
+              <li><%= message %></li>
+            <% end %>
+          </ul>
+        </div>
+      <% end %>
+
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-4">
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1" for="workflow_owner_username">Owner <span class="text-red-500">*</span></label>
+          <%= form.text_field :owner_username, value: current_user.username, class: "mt-1 block w-full rounded-md border border-gray-300 bg-gray-50 text-gray-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400", placeholder: "Example name", readonly: true %>
+        </div>
+        <div>
+          <label class="block text-sm font-semibold text-gray-700 mb-1" for="workflow_title">Workflow name <span class="text-red-500">*</span></label>
+          <%= form.text_field :title, class: "mt-1 block w-full rounded-md border border-gray-300 bg-white text-gray-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400", placeholder: "Workflow name" %>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <label class="block text-sm font-semibold text-gray-700 mb-1" for="workflow_description">Description (optional)</label>
+        <%= form.text_area :description, rows: 2, class: "mt-1 block w-full rounded-md border border-gray-300 bg-white text-gray-900 shadow-sm focus:ring-indigo-500 focus:border-indigo-500 placeholder-gray-400", placeholder: "Description" %>
+      </div>
+
+      <div class="mb-6">
+        <label class="block text-sm font-semibold text-gray-700 mb-2">Visibility</label>
+        <div class="flex flex-col space-y-4">
+          <!-- Public Workflow Option -->
+          <label class="custom-radio-label">
+            <%= form.radio_button :public, true %>
+            <div class="radio-icon-wrapper">
+              <div class="radio-dot"></div>
+              <span class="material-symbols-outlined">desktop_windows</span>
+            </div>
+            <div class="radio-content">
+              <div class="title">Public</div>
+              <div class="description">Public workflows can be found and joined by anyone.</div>
+            </div>
+          </label>
+
+          <!-- Private Workflow Option -->
+          <label class="custom-radio-label">
+            <%= form.radio_button :public, false %>
+            <div class="radio-icon-wrapper">
+              <div class="radio-dot"></div>
+              <span class="material-symbols-outlined">lock</span>
+            </div>
+            <div class="radio-content">
+              <div class="title">Private</div>
+              <div class="description">Private workflows are only visible to users invited.</div>
+            </div>
+          </label>
+        </div>
+      </div>
+
+      <div>
+        <%= form.submit "Create Workflow", class: "w-full inline-flex justify-center py-3 px-6 border border-transparent shadow-sm text-base font-medium rounded-md text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 focus:ring-offset-white cursor-pointer" %>
+      </div>
+    <% end %>
+  </div>
+</div>
+</body>
+</html>

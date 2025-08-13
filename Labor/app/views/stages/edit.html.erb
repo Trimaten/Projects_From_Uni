@@ -1,0 +1,177 @@
+<div class="w-full min-h-screen px-6 py-8 bg-gray-50">
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold">Edit Stage</h1>
+    <p class="text-gray-600">Manage stage details, order and participants</p>
+  </div>
+
+  <%= form_with model: [@workflow, @stage], method: :patch, local: true, data: { turbo: false } do |form| %>
+    <div class="flex space-x-4 w-full min-h-[75vh]">
+      <!-- Left Column -->
+      <div class="w-1/2 bg-white p-6 rounded-2xl shadow-lg space-y-8">
+        <!-- Edit Title -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Stage Title</h2>
+          <%= form.text_field :title, class: "w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400" %>
+        </div>
+        <!-- Approvable Section -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Form Approval</h2>
+          <label class="inline-flex items-center space-x-2 text-gray-700">
+            <%= form.check_box :approvable, { class: "rounded" }, "1", "0" %>
+            <span>Workflow owner approval is required for submitted forms</span>
+          </label>
+        </div>
+
+
+        <!-- Drag & Drop: Reorder Stages -->
+        <div>
+          <h2 class="text-xl font-semibold mb-2">Reorder Stages</h2>
+          <ul id="stages-list" class="space-y-2">
+            <% @workflow.stages.order(:position).each do |stage| %>
+              <li class="bg-gray-100 px-4 py-2 rounded cursor-move shadow-sm" draggable="true" data-stage-id="<%= stage.id %>">
+                <%= stage.title %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+
+        <%= form.hidden_field :stage_order, value: @stage_order, id: 'stage-order-input' %>
+
+        <!-- Participants -->
+        <div>
+          <h3 class="font-semibold text-lg mb-2">Participants with Answers</h3>
+          <ul>
+            <% @participants_with_answers.each do |participant| %>
+              <li>
+                <%= link_to participant.user.username, edit_workflow_stage_path(@workflow, @stage, selected_user_id: participant.user.id) %>
+              </li>
+            <% end %>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Right Column -->
+      <div class="w-2/3 ml-6 bg-white p-6 rounded-2xl shadow-md overflow-auto max-h-[75vh]">
+        <% if @filled_form %>
+          <h3 class="text-2xl font-semibold mb-4">Responses from <%= @selected_user.username %>:</h3>
+          <ul class="space-y-4">
+            <% @filled_form.filled_formfields.each do |filled_field| %>
+              <% formfield = filled_field.formfield %>
+              <% field_type = formfield.try(:typefield) || 'text' %>
+              <% options = formfield.try(:content_array) || [] %>
+
+              <% raw_value = filled_field.try(:value) || '' %>
+              <% parsed_value = JSON.parse(raw_value) rescue raw_value %>
+
+              <li class="border rounded-lg p-4 bg-gray-50 shadow-sm">
+                <p class="text-lg font-medium text-gray-800 mb-2"><%= formfield.title %>:</p>
+
+                <% case field_type
+                  when 'radio' %>
+                    <% options.each do |opt| %>
+                      <label class="flex items-center mb-1">
+                        <input type="radio" disabled <%= 'checked' if parsed_value == opt %> class="mr-2">
+                        <span><%= opt %></span>
+                      </label>
+                    <% end %>
+
+                <% when 'checkbox' %>
+                    <% options.each do |opt| %>
+                      <label class="flex items-center mb-1">
+                        <input type="checkbox" disabled <%= parsed_value.include?(opt) rescue false %> class="mr-2">
+                        <span><%= opt %></span>
+                      </label>
+                    <% end %>
+
+                <% when 'select' %>
+                    <select disabled class="border rounded px-2 py-1 bg-gray-100 text-gray-700">
+                      <% options.each do |opt| %>
+                        <option <%= 'selected' if parsed_value == opt %>><%= opt %></option>
+                      <% end %>
+                    </select>
+
+                <% else %>
+                    <p class="text-gray-700">
+                      <%= parsed_value.is_a?(Array) ? parsed_value.join(", ") : parsed_value %>
+                    </p>
+                <% end %>
+              </li>
+            <% end %>
+          </ul>
+        <% elsif @selected_user %>
+          <p class="text-gray-600 italic"><%= @selected_user.username %> has not filled out this form yet.</p>
+        <% else %>
+          <p class="text-gray-600 italic">Select a participant on the left to view their responses.</p>
+        <% end %>
+        <% if @stage.approvable? && @filled_form %>
+          <%= hidden_field_tag "filled_form[id]", @filled_form.id %>
+          <div class="flex justify-end mt-6 items-center space-x-2">
+            <label class="flex items-center space-x-2 cursor-pointer">
+              <input type="checkbox" name="filled_form[approved]" value="1" <%= 'checked' if @filled_form.approved? %> class="w-5 h-5 text-green-500 border-gray-300 rounded" />
+              <span class="text-gray-700 text-sm select-none">Approved</span>
+            </label>
+          </div>
+        <% end %>
+      </div>
+    </div>
+
+    <!-- Buttons -->
+    <div class="w-full flex justify-end mt-12 space-x-4">
+      <%= link_to 'Cancel', workflow_path(@workflow), class: 'bg-gray-300 text-gray-800 px-6 py-3 rounded-full hover:bg-gray-400' %>
+      <%= form.submit 'Save Stage', class: 'bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600' %>
+    </div>
+  <% end %>
+</div>
+
+<script>
+  function initDragDrop() {
+    const list = document.getElementById("stages-list");
+    const orderInput = document.getElementById("stage-order-input");
+    let dragged = null;
+
+    if (!list || !orderInput) return;
+
+    const updateOrderInput = () => {
+      const ids = Array.from(list.children).map(item => item.dataset.stageId);
+      orderInput.value = ids.join(",");
+    };
+
+    list.addEventListener("dragstart", e => {
+      const li = e.target.closest("li");
+      if (li) {
+        dragged = li;
+        li.classList.add("opacity-50");
+        e.dataTransfer.effectAllowed = "move";
+      }
+    });
+
+    list.addEventListener("dragend", () => {
+      if (dragged) {
+        dragged.classList.remove("opacity-50");
+        updateOrderInput();
+        dragged = null;
+      }
+    });
+
+    list.addEventListener("dragover", e => {
+      e.preventDefault();
+      const target = e.target.closest("li");
+      if (target && dragged && target !== dragged) {
+        const bounding = target.getBoundingClientRect();
+        const offset = bounding.y + bounding.height / 2;
+        (e.clientY - offset > 0) ? target.after(dragged) : target.before(dragged);
+      }
+    });
+
+    list.addEventListener("drop", e => {
+      e.preventDefault();
+      updateOrderInput();
+    });
+
+    updateOrderInput();
+  }
+
+  document.addEventListener("DOMContentLoaded", initDragDrop);
+  document.addEventListener("turbo:load", initDragDrop);
+</script>

@@ -1,0 +1,9 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+filled_form_one:
+  form: first_form
+  user: one
+
+filled_form_two:
+  form: second_form
+  user: two

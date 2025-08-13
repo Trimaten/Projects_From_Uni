@@ -1,0 +1,129 @@
+<div class="flex w-full min-h-screen bg-white">
+  <aside class="w-72 border-r border-gray-200 p-6 bg-gray-50">
+    <h2 class="text-l font-bold text-gray-800 mb-4">Recently Visited Workflows</h2>
+    <ul class="space-y-2">
+      <% @recent_workflows.each do |workflow| %>
+        <li>
+          <%= link_to "#{workflow.title} - #{workflow.owner.username}", workflow, class: "text-blue-600 hover:underline" %>
+        </li>
+      <% end %>
+    </ul>
+  </aside>
+
+  <main class="flex-1 p-8">
+    <div class="flex space-x-6 w-full">
+      <%# MODIFIED: Removed shadow-lg, added border border-gray-300 %>
+      <div class="flex-1 bg-white p-8 rounded-2xl border border-gray-300 relative mb-6">
+        <h2 class="text-2xl font-semibold mb-4">My Workflows</h2>
+
+        <% @user_workflows.each_with_index do |workflow, index| %>
+          <div class="mb-4">
+            <div class="bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-center px-4 py-3">
+                <button type="button"
+                        class="mr-3 text-gray-400 hover:text-gray-600 focus:outline-none transition-transform duration-200"
+                        data-toggle="workflow-details-my-<%= index %>"
+                        onclick="toggleWorkflowDetails(this, 'workflow-details-my-<%= index %>')">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </button>
+
+                <div class="flex-1">
+                  <%= link_to workflow, class: "block font-medium hover:text-indigo-600 transition-colors" do %>
+                    <%= workflow.title %>
+                  <% end %>
+                </div>
+              </div>
+
+              <div id="workflow-details-my-<%= index %>" class="hidden border-t border-gray-200 px-4 py-3 bg-gray-25">
+                <div class="space-y-2 text-sm">
+                  <div class="text-sm text-gray-500 mt-1">Status: <%= workflow.status %></div>
+                  <div class="text-sm text-gray-500 mt-1">
+                    Description:
+                    <% if workflow.description.present? %>
+                      <%= workflow.description %>
+                    <% else %>
+                      <em>No description.</em>
+                    <% end %>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+        <% end %>
+
+        <div class="mt-6">
+          <%= link_to "+ New Workflow", new_workflow_path,
+                      class: "inline-block text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 px-4 py-2 rounded" %>
+        </div>
+      </div>
+
+      <%# MODIFIED: Removed shadow-lg, added border border-gray-300 %>
+      <div class="flex-1 bg-white p-8 rounded-2xl border border-gray-300 relative mb-6">
+        <h2 class="text-2xl font-semibold mb-4">Workflows Invited To</h2>
+
+        <% @invited_workflows.each_with_index do |workflow, index| %>
+          <div class="mb-4">
+            <div class="bg-gray-50 hover:bg-gray-100 text-gray-700 rounded-lg border border-gray-200 shadow-sm hover:shadow-md transition-all">
+              <div class="flex items-center px-4 py-3">
+                <button type="button"
+                        class="mr-3 text-gray-400 hover:text-gray-600 focus:outline-none transition-transform duration-200"
+                        data-toggle="workflow-details-invited-<%= index %>"
+                        onclick="toggleWorkflowDetails(this, 'workflow-details-invited-<%= index %>')">
+                  <svg class="w-4 h-4 transform transition-transform duration-200" fill="currentColor" viewBox="0 0 20 20">
+                    <path fill-rule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clip-rule="evenodd"></path>
+                  </svg>
+                </button>
+
+                <div class="flex-1">
+                  <% if current_user && Participant.exists?(user_id: current_user.id, workflow_id: workflow.id) %>
+                    <%# If user is a participant, link to their progress/dashboard for this workflow %>
+                    <%= link_to workflow.title, workflow_progress_path(workflow) %>
+                    
+                  <% else %>
+                    <%# If user is NOT a participant, link to the workflow overview %>
+                    <%= link_to workflow.title, workflow_overview_path(workflow) %> <%# Assuming workflow_overview_path expects the workflow object directly %>
+                  <% end %>
+                </div>
+              </div>
+
+              <div id="workflow-details-invited-<%= index %>" class="hidden border-t border-gray-200 px-4 py-3 bg-gray-25">
+                <div class="space-y-2 text-sm">
+                  <div class="text-sm text-gray-500 mt-1">Status: <%= workflow.status %></div>
+                  <div class="text-sm text-gray-500 mt-1">Owner: <%= workflow.owner.username %></div>
+                  <div class="text-sm text-gray-500 mt-1">
+                    Description:
+                    <% if workflow.description.present? %>
+                      <%= workflow.description %>
+                    <% else %>
+                      <em>No description.</em>
+                    <% end %>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+    function toggleWorkflowDetails(button, detailsId) {
+        const details = document.getElementById(detailsId);
+        const triangle = button.querySelector('svg');
+
+        if (details.classList.contains('hidden')) {
+            // Expand
+            details.classList.remove('hidden');
+            triangle.classList.add('rotate-90');
+        } else {
+            // Collapse
+            details.classList.add('hidden');
+            triangle.classList.remove('rotate-90');
+        }
+    }
+</script>

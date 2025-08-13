@@ -1,0 +1,182 @@
+<head>
+    <title><%= content_for(:title) || "Waveapp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/wave.png" type="image/png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+</head>
+
+  <body class="w-screen h-screen">
+    <!-- Flashcards -->
+    <%# START: Flash messages section (positioned absolutely over everything) %>
+    <div id="flash-messages-container" class="absolute top-5 right-5 z-[1000] flex flex-col gap-2">
+      <% flash.each do |type, msg| %>
+        <%
+          background_class = ''
+          text_class = ''
+          border_class = ''
+
+          case type.to_s
+          when 'notice'
+            background_class = 'bg-green-100'
+            text_class = 'text-green-800'
+            border_class = 'border-green-300'
+          when 'alert'
+            background_class = 'bg-red-100'
+            text_class = 'text-red-800'
+            border_class = 'border-red-300'
+          else
+            background_class = 'bg-gray-100'
+            text_class = 'text-gray-800'
+            border_class = 'border-gray-300'
+          end
+        %>
+
+        <div class="flash-message p-3 rounded-lg shadow-md flex items-center justify-between font-sans text-base leading-tight max-w-sm <%= background_class %> <%= text_class %> border <%= border_class %>">
+          <%= msg %>
+          <button class="close-flash-button ml-4 p-0 bg-transparent border-none text-inherit text-xl font-bold cursor-pointer leading-none">&times;</button>
+        </div>
+      <% end %>
+    </div>
+    <!-- Banner/Header -->
+    <header class="w-full flex items-center bg-gray-50 border-b border-gray-200 h-14 px-4">
+      <% if false # deactivate element for now, maybe we implement it later %>
+      <button class="mr-4 p-2 rounded hover:bg-gray-100">
+        <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"/>
+        </svg>
+      </button>
+        <%end %>
+      <%= link_to root_path do %>
+        <%= image_tag "wave.png", alt: "Logo", class: "h-7 w-7 mr-2" %>
+      <% end %>
+      <span class="font-medium text-lg"><%= content_for?(:banner_title) ? yield(:banner_title) : (@banner_title || "Workflow Overview") %></span>
+      <div class="flex-1"></div>
+
+      <%= form_with url: search_path, method: :get, local: true, class: "flex items-center" do %>
+        <input
+          type="text"
+          name="query"
+          value="<%= params[:query] %>"
+          placeholder="Search"
+          class="border rounded px-2 py-1 w-56 h-8 mr-2 border-gray-300 text-sm"
+          />
+        <button
+          type="submit"
+          class="mr-4 p-2 rounded border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center w-8 h-8 cursor-pointer"
+        >
+          <span class="text-xl font-bold">⌕</span>
+        </button>
+      <% end %>
+
+      <%= link_to new_workflow_path do %>
+      <button class="mr-4 p-2 rounded border border-gray-300 bg-white hover:bg-gray-100 flex items-center justify-center w-8 h-8 cursor-pointer">
+        <span class="text-xl font-bold">+</span>
+      </button>
+      <% end %>
+
+      <!-- profile button and dropdown menu thingy: -->
+      <div class="relative">
+        <button id="profile-button" class="w-8 h-8 rounded-full border border-gray-300 bg-white flex items-center justify-center focus:outline-none cursor-pointer">
+          <svg width="24" height="24" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+            <circle cx="12" cy="8" r="4"/>
+            <path d="M6 20c0-2.21 3.58-4 6-4s6 1.79 6 4"/>
+          </svg>
+        </button>
+        <div
+          id="profile-menu"
+          class="hidden absolute top-full right-0 mt-2 w-52 bg-white border border-gray-200 rounded-lg shadow-lg z-50 transition ease-out duration-200 transform opacity-0 scale-95"
+        >
+        <div class="px-4 py-3 text-sm text-gray-700 border-b border-gray-100">
+            Signed in as<br>
+            <strong><%= current_user.username %></strong>
+          </div>
+          <ul role="menu" class="text-sm text-gray-700">
+            <li role="none">
+              <%= link_to 'Profile', '#', role: 'menuitem', class: 'block px-4 py-2 hover:bg-gray-100 cursor-not-allowed' %>
+            </li>
+            <li role="none">
+              <%= button_to "Logout", destroy_user_session_path,
+                            method: :delete,
+                            form: { role: "none" },
+                            class: "block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500 cursor-pointer",
+                            role: "menuitem" %>
+            </li>
+            <li role="none">
+              <%= form_with url: registration_path(:user), method: :delete, local: true, id: "delete-account-form", html: { role: "none" } do %>
+                <button
+                  id="open-delete-modal-btn"
+                  type="button"
+                  role="menuitem"
+                  class="block w-full text-left px-4 py-2 hover:bg-gray-100 text-red-500 cursor-pointer"
+                >
+                  Delete Account
+                </button>
+              <% end %>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+
+    </header>
+    <main class="container">
+      <%= yield %>
+    </main>
+
+    <!-- Confirmation Thingy for delete account (hidden by default) -->
+    <div id="confirm-delete-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm flex items-center justify-center hidden z-[9999]">
+      <div class="bg-white rounded-lg shadow-lg p-6 max-w-sm w-full text-center">
+        <p class="mb-6 text-gray-800 text-lg font-semibold">
+          Are you sure you want to delete your account? This action cannot be undone.
+        </p>
+        <div class="flex justify-center gap-4">
+          <button id="cancel-delete-btn" class="px-4 py-2 rounded border border-gray-300 hover:bg-gray-100">
+            Cancel
+          </button>
+          <button id="confirm-delete-btn" class="px-4 py-2 rounded bg-red-600 text-white hover:bg-red-700">
+            Delete Account
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const modal = document.getElementById("confirm-delete-modal");
+            const openBtn = document.getElementById("open-delete-modal-btn");
+            const cancelBtn = document.getElementById("cancel-delete-btn");
+            const confirmBtn = document.getElementById("confirm-delete-btn");
+
+            openBtn.addEventListener("click", () => {
+                modal.classList.remove("hidden");
+            });
+
+            cancelBtn.addEventListener("click", () => {
+                modal.classList.add("hidden");
+            });
+
+            confirmBtn.addEventListener("click", () => {
+                // Submit the form programmatically:
+                // Assuming your delete form has id 'delete-account-form'
+                document.getElementById("delete-account-form").submit();
+            });
+        });
+
+
+    </script>
+  </body>
+

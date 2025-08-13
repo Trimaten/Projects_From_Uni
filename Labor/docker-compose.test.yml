@@ -1,0 +1,33 @@
+services:
+  testapp:
+    image: placeholder
+    ports:
+      - "3002:3000"
+    depends_on:
+      databaseT:
+        condition: service_healthy  #check if database is running and accept connections
+    environment:
+      - RAILS_ENV=test   #important to avoid connecting with cable database
+      - DATABASE_URL=postgres://wave:5g9wg9qT3gvFacMezZcQs2W2zEHjrLJg@databaseT:5432/wave
+
+  databaseT:
+    image: postgres:17.4
+    ports:
+      - "5433:5432"
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: 5g9wg9qT3gvFacMezZcQs2W2zEHjrLJg
+      POSTGRES_DB: wave
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --auth=md5"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "wave"] #check if db is running and allows connections with user wave
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    volumes:
+      - db-data-t:/var/lib/postgresql/data 
+
+volumes:
+  db-data-t:

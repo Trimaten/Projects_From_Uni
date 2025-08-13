@@ -1,0 +1,123 @@
+<div class="w-screen min-h-screen px-6 py-8 bg-gray-50">
+
+  <!-- Header -->
+  <div class="mb-6">
+    <h1 class="text-4xl font-bold mb-2">Fill Form</h1>
+    <p class="text-lg text-gray-800 font-semibold mt-1">Form Title: <%= @form.title %></p>
+  </div>
+
+  <!-- Form Container -->
+  <div class="flex space-x-4 max-w-screen-xl mx-auto w-full min-h-[75vh]">
+
+    <!-- Left Main Box -->
+    <div class="flex-1 bg-white p-8 rounded-2xl shadow-lg mb-6">
+
+      <%= form_with model: @form, url: submit_workflow_form_path(@form.stage.workflow, @form), method: :patch do |f| %>
+        
+        <% if @form.form_fields.any? %>
+          <% @form.form_fields.each do |field| %>
+            <% type = field.typefield.to_s.downcase.strip %>
+            <% allowed_types = %w[select checkbox radio] %>
+            <% contents = begin
+              parsed = JSON.parse(field.content || "[]")
+              parsed.is_a?(Array) ? parsed : []
+            rescue
+              field.content.to_s.split(",").map(&:strip).reject(&:blank?)
+            end %>
+            <% contents = [""] if contents.empty? && allowed_types.include?(type) %>
+
+            <div class="mb-6">
+
+              <!-- Title with asterisk if required -->
+              <p class="font-semibold text-gray-700 mb-2 relative inline-block">
+                <%= field.title %>
+                <% if field.required %>
+                  <span class="text-red-600 text-xl font-bold ml-1 cursor-pointer relative group">
+                    *
+                    <span
+                      class="absolute bottom-full mb-1 left-1/2 -translate-x-1/2 whitespace-nowrap bg-black text-white text-xs rounded px-2 py-1 opacity-0 pointer-events-none group-hover:opacity-100 group-hover:pointer-events-auto transition-opacity"
+                      style="z-index: 10;"
+                    >
+                      Required
+                    </span>
+                  </span>
+                <% end %>
+              </p>
+
+              <% case type %>
+              <% when 'select' %>
+                <%= select_tag "answers[#{field.id}]", options_for_select(contents), prompt: "Select an option", class: "mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'checkbox' %>
+                <div class="space-y-2">
+                  <% contents.each_with_index do |option, idx| %>
+                    <% input_id = "field_#{field.id}_option_#{idx}" %>
+                    <div class="flex items-center space-x-2">
+                      <%= check_box_tag "answers[#{field.id}][]", option, false, id: input_id, class: "form-checkbox" %>
+                      <%= label_tag input_id, option, class: "text-gray-700" %>
+                    </div>
+                  <% end %>
+                </div>
+
+              <% when 'radio' %>
+                <div class="space-y-2">
+                  <% contents.each_with_index do |option, idx| %>
+                    <% input_id = "field_#{field.id}_option_#{idx}" %>
+                    <div class="flex items-center space-x-2">
+                      <%= radio_button_tag "answers[#{field.id}]", option, false, id: input_id, class: "form-radio" %>
+                      <%= label_tag input_id, option, class: "text-gray-700" %>
+                    </div>
+                  <% end %>
+                </div>
+
+              <% when 'text' %>
+                <%= text_field_tag "answers[#{field.id}]", nil, placeholder: "Enter your answer", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'number' %>
+                <%= number_field_tag "answers[#{field.id}]", nil, placeholder: "Enter a number", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'date' %>
+                <%= date_field_tag "answers[#{field.id}]", nil, class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'textarea' %>
+                <%= text_area_tag "answers[#{field.id}]", nil, placeholder: "Enter your answer", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'file' %>
+                <%= file_field_tag "answers[#{field.id}]", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'email' %>
+                <%= email_field_tag "answers[#{field.id}]", nil, placeholder: "you@example.com", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'url' %>
+                <%= url_field_tag "answers[#{field.id}]", nil, placeholder: "https://example.com", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% when 'phone' %>
+                <%= telephone_field_tag "answers[#{field.id}]", nil, placeholder: "+49 123 456789", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+
+              <% else %>
+                <%= text_field_tag "answers[#{field.id}]", nil, placeholder: "Enter your answer", class: "mt-1 w-full rounded-md border-gray-300 shadow-sm focus:ring focus:ring-blue-200" %>
+              <% end %>
+            </div>
+          <% end %>
+
+        <% else %>
+          <p class="text-gray-600">This form has no fields defined yet.</p>
+        <% end %>
+
+        <div class="mt-8 flex justify-between">
+          <%= link_to 'Cancel', workflow_progress_path(@form.stage.workflow.id), class: 'bg-gray-300 text-gray-800 px-6 py-3 rounded-full hover:bg-gray-400' %>
+          <%= f.submit 'Submit Form', class: "bg-blue-500 text-white px-6 py-3 rounded-full hover:bg-blue-600" %>
+        </div>
+
+      <% end %>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="w-96 bg-gray-100 p-6 rounded-2xl shadow-lg min-h-[75vh]">
+      <h3 class="text-xl font-semibold mb-4">Form Info</h3>
+      <p><strong>Stage:</strong> <%= @form.stage.title %></p>
+      <p><strong>Workflow:</strong> <%= @form.stage.workflow.title %></p>
+      <p class="mt-4 text-gray-600">Please fill out the form carefully. Fields marked with "*" must be completed.</p>
+    </div>
+  </div>
+</div>

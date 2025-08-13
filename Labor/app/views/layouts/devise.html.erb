@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "Waveapp" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/wave.png" type="image/png">
+
+    <%# Includes all stylesheet files in app/assets/stylesheets %>
+    <%= stylesheet_link_tag :app, "data-turbo-track": "reload" %>
+    <%= javascript_importmap_tags %>
+
+    <style>
+      body {
+        overflow-x: hidden; /* This fixes the white area when w-screen is properly applied */
+      }
+    </style>
+
+  </head>
+
+  <body class="w-screen h-screen flex">
+
+  <%# START: Flash messages section (positioned absolutely over everything) %>
+    <div id="flash-messages-container" class="absolute top-5 right-5 z-[1000] flex flex-col gap-2">
+      <% flash.each do |type, msg| %>
+        <%
+          background_class = ''
+          text_class = ''
+          border_class = ''
+
+          case type.to_s
+          when 'notice'
+            background_class = 'bg-green-100'
+            text_class = 'text-green-800'
+            border_class = 'border-green-300'
+          when 'alert'
+            background_class = 'bg-red-100'
+            text_class = 'text-red-800'
+            border_class = 'border-red-300'
+          else
+            background_class = 'bg-gray-100'
+            text_class = 'text-gray-800'
+            border_class = 'border-gray-300'
+          end
+        %>
+        
+        <div class="flash-message p-3 rounded-lg shadow-md flex items-center justify-between font-sans text-base leading-tight max-w-sm <%= background_class %> <%= text_class %> border <%= border_class %>">
+          <%= msg %>
+          <button class="close-flash-button ml-4 p-0 bg-transparent border-none text-inherit text-xl font-bold cursor-pointer leading-none">&times;</button>
+        </div>
+      <% end %>
+    </div>
+    <%# END: Flash messages section %>
+
+    <main class="container w-screen">
+      <%= yield %>
+    </main>
+  </body>
+</html>

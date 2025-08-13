@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+first_stage:
+  title: "Tri"
+  workflow: one
+  position: 1
+
+second_stage:
+  title: "Pizzaparlor"
+  workflow: one
+  position: 2
+
+third_stage:
+  title: "Third Stage"
+  workflow: one
+  position: 2

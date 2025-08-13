@@ -1,0 +1,23 @@
+one:
+  firstname: "John"
+  surname: "Doe"
+  username: "johndoe"
+  email: "john.doe@example.com"
+  encrypted_password: "$2a$12$KIXQvYkI4jBy8/FZGlEYbOcREHqA2.JZIHhYOlnd34Bg7xJbUckT2"
+  confirmed_at: <%= Time.now %>
+
+two:
+  firstname: "Jane"
+  surname: "Doe"
+  username: "janedoe"
+  email: "jane.doe@example.com"
+  encrypted_password: "$2a$12$QwertyEncryptHashForJane"
+  confirmed_at: <%= Time.now %>
+
+three:
+  firstname: "Test"
+  surname: "User"
+  username: "testuser"
+  email: "test.user@example.com"
+  encrypted_password: <%= Devise::Encryptor.digest(User, 'password') %>
+  confirmed_at: <%= Time.now %>

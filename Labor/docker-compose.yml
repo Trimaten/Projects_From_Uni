@@ -1,0 +1,36 @@
+services:
+  webapp:
+    build: .
+    volumes:
+      - ./:/app
+    ports:
+      - "3001:3000"
+    depends_on:
+      database:
+        condition: service_healthy  #check if database is running and accept connections
+    environment:
+      - RAILS_ENV=development   #important to avoid connecting with cable database
+      - DATABASE_URL=postgres://wave:5g9wg9qT3gvFacMezZcQs2W2zEHjrLJg@database:5432/wave
+    command: bash -c "rm -f tmp/pids/server.pid && bundle install && bundle exec rails db:migrate && rails assets:precompile  & rails tailwindcss:watch && bundle exec rails server -b 0.0.0.0  "
+
+  database:
+    image: postgres:17.4
+    ports:
+      - "5432:5432"
+    environment:
+      TZ: Europe/Berlin
+      POSTGRES_USER: wave
+      POSTGRES_PASSWORD: 5g9wg9qT3gvFacMezZcQs2W2zEHjrLJg
+      POSTGRES_DB: wave
+      POSTGRES_INITDB_ARGS: "--encoding=UTF8 --auth=md5"
+    healthcheck:
+      test: ["CMD", "pg_isready", "-U", "wave"] #check if db is running and allows connections with user wave
+      interval: 5s
+      retries: 5
+      start_period: 10s
+      timeout: 5s
+    volumes:
+      - db-data:/var/lib/postgresql/data 
+
+volumes:
+  db-data:

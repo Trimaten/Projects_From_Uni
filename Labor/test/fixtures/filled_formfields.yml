@@ -1,0 +1,11 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+field_input_one:
+  filled_form: filled_form_one
+  formfield: field_one
+  value: "Some text"
+
+field_input_two:
+  filled_form: filled_form_two
+  formfield: field_two
+  value: "123"

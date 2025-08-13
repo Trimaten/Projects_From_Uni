@@ -1,0 +1,37 @@
+<div class="flex h-screen w-screen">
+  <div class="flex items-center justify-center w-1/2 bg-gray-100">
+    <div class="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4 w-full max-w-md">
+      <h2 class="block text-gray-700 text-2xl font-bold mb-6 text-center">Log in</h2>
+
+      <%= form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+        <div class="mb-4">
+          <%= f.label :username, class: "block text-gray-700 text-sm font-bold mb-2" %><br />
+          <%= f.text_field :username, autofocus: true, autocomplete: "username", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        </div>
+
+        <div class="mb-6">
+          <%= f.label :password, class: "block text-gray-700 text-sm font-bold mb-2" %><br />
+          <%= f.password_field :password, autocomplete: "current-password", class: "shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" %>
+        </div>
+
+        <% if devise_mapping.rememberable? %>
+          <div class="flex items-center mb-4">
+            <%= f.check_box :remember_me, class: "mr-2 leading-tight" %>
+            <%= f.label :remember_me, class: "text-sm text-gray-700" %>
+          </div>
+        <% end %>
+
+        <div class="flex items-center justify-between">
+          <%= f.submit "Log in", class: "bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline" %>
+          <%# REMOVED THE LINKS RENDER HERE %>
+        </div>
+      <% end %>
+
+      <%# NEW SECTION FOR LINKS, SIMILAR TO GITHUB STYLE %>
+      <div class="mt-8 pt-4 border-t border-gray-200 text-center">
+        <%= render "devise/shared/links" %>
+      </div>
+    </div>
+  </div>
+  <div class="w-1/2 h-full bg-gradient-to-r from-purple-500 to-indigo-600"></div>
+</div>

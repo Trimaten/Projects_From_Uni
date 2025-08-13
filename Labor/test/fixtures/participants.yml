@@ -1,0 +1,16 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  user: one
+  workflow: one
+  current_progress: 0
+
+two:
+  user: two
+  workflow: one
+  current_progress: 1
+
+three:
+  user: three
+  workflow: two
+  current_progress: 1

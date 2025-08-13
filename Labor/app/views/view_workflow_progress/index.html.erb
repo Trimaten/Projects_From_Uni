@@ -1,0 +1,109 @@
+<div class="flex flex-col items-start py-8 px-4 w-screen h-screen bg-gray-100">
+  <main class="container mx-auto flex-grow flex flex-col items-start py-8 px-4">
+    <h2 class="text-3xl font-bold text-gray-800 mb-2"><%= @workflow_title %></h2>
+    <p class="text-gray-600 mb-8 flex items-center">
+      <svg class="w-5 h-5 mr-1 inline-block text-gray-700" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.657 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+      </svg>
+      <span class="font-semibold"><%= @workflow_owner.respond_to?(:username) ? @workflow_owner.username : @workflow_owner %></span>
+    </p>
+
+    <%# Change items-start to items-stretch for equal height columns %>
+    <div class="flex flex-row items-stretch space-x-8 w-full"> <%# Added w-full to the flex container %>
+      <%# This is your "Stages" div %>
+      <div class="border rounded-lg p-6 bg-white" style="flex-grow: 1; min-width: 200px;">
+        <div class="relative flex flex-col items-start" style="min-height: 300px;">
+          <% @stages.sort_by(&:position).each_with_index do |stage, idx| %>
+            <%
+              # Determine the class for the circle (based on the stage's own index)
+              circle_color_class = ""
+              if idx < @current_stage_count # This stage is already completed
+                circle_color_class = "bg-green-500"
+              elsif idx == @current_stage_count # This is the current/next stage to be done
+                circle_color_class = "bg-yellow-400"
+              else # This is a future stage
+                circle_color_class = "bg-gray-400"
+              end
+
+              # Determine the class for the connecting line (based on the status of the *next* stage it leads to)
+              line_color_class = "" # Initialize to empty string
+              if (idx + 1) < @current_stage_count # The stage it leads to is already completed
+                line_color_class = "text-green-500"
+              elsif (idx + 1) == @current_stage_count # The stage it leads to is the current/pending one
+                line_color_class = "text-yellow-400"
+              else # The stage it leads to is a future stage
+                line_color_class = "text-gray-400"
+              end
+            %>
+
+            <div class="flex items-center mb-2 relative" style="min-height: 48px;">
+              <div class="flex flex-col items-center mr-3">
+                <div class="w-4 h-4 rounded-full <%= circle_color_class %>"></div>
+                <% if idx < @stages.size - 1 %>
+                  <svg class="w-4 h-4 <%= line_color_class %>" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M12 5v14m0 0l-4-4m4 4l4-4" />
+                  </svg>
+                <% end %>
+              </div>
+              <div>
+                <div class="text-base font-medium text-gray-700"><%= stage.title %></div>
+                <div class="flex items-center text-xs text-gray-500">
+                  <svg class="w-4 h-4 mr-1 inline-block" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" d="M5.121 17.804A13.937 13.937 0 0112 15c2.485 0 4.797.657 6.879 1.804M15 10a3 3 0 11-6 0 3 3 0 016 0z" />
+                  </svg>
+                  <%= stage.user.respond_to?(:name) ? stage.user.name : 'User' %>
+                </div>
+              </div>
+            </div>
+          <% end %> <%# This 'end' correctly closes the each_with_index loop %>
+        </div>
+      </div>
+
+      <%# This is your REVISED "Actions" div %>
+      <div class="border rounded-lg p-6 bg-white flex-grow flex flex-col" style="min-width: 250px;">
+        <%
+          # Determine the current stage for display purposes
+          # If @current_stage_count is equal to @stages.size, it means all stages are completed.
+          workflow_completed = (@current_stage_count >= @stages.size)
+          current_stage_for_display = @stages[@current_stage_count] unless workflow_completed
+        %>
+
+        <div>
+          <h3 class="text-3xl font-semibold text-gray-800 mb-4">
+            <% if workflow_completed %>
+              Workflow:
+            <% else %>
+              <%= current_stage_for_display&.title || 'Workflow' %>: <%# Use &. (safe navigation) for title %>
+            <% end %>
+          </h3>
+
+          <% if workflow_completed %>
+            <p class="text-green-600 mb-4">
+              <span class="font-semibold">Status:</span> Complete 🎉
+            </p>
+          <% else %>
+            <p class="text-yellow-600 mb-4">
+              <span class="font-semibold">Status:</span> Pending
+            </p>
+          <% end %>
+        </div>
+
+        <div class="flex-grow"></div> <%# This div takes up available space and pushes content below it to the bottom %>
+
+        <div class="flex flex-col space-y-2">          
+          <% if @previous_filled_form.present? && !@previous_filled_form.approved? %>
+            <p class="text-red-600 font-semibold">
+              Please wait for approval of the previous stage's form before continuing.
+            </p>
+
+          <% elsif !workflow_completed && current_stage_for_display && current_stage_for_display.form.present? %>
+            <%= button_to 'Fill Next Form', fill_workflow_form_path(@workflow, current_stage_for_display.form), method: :get, class: "w-full flex justify-center py-3 px-4 border border-transparent rounded-md shadow-sm text-lg font-medium text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500" %>
+
+          <% elsif !workflow_completed %>
+            <p class="text-gray-500 text-sm italic">This stage does not require a form to fill.</p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </main>
+</div>

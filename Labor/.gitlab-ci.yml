@@ -1,0 +1,166 @@
+workflow:
+  rules:
+    - if: $CI_PIPELINE_SOURCE == "push"
+    - if: $CI_PIPELINE_SOURCE == "merge_request" && $CI_MERGE_REQUEST_TARGET_BRANCH_NAME == "main"
+    
+stages:
+  - build
+  - test
+  - deploy
+  - notify
+
+variables:
+  IMAGE_NAME: "registry.it.hs-heilbronn.de/it/courses/seb/lab/ss25/group-03:$CI_COMMIT_REF_SLUG"
+
+  DOCKER_REGISTRY: $CI_REGISTRY
+  DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE/$CI_COMMIT_BRANCH # Image name based on branch
+  LATEST_DOCKER_IMAGE_NAME: $CI_REGISTRY_IMAGE/latest
+  DISCORD_WEBHOOK_URL: "https://discord.com/api/webhooks/1364147816859045979/CANX-n1dIA0SKyt0Fsnfb3DMXtBPaV-NxvOW2YS5y4ELdF0d1lEofm04BBBEw8vHz3bb" # Make sure this is set as a secret variable
+  GITLAB_PROJECT_URL: "https://git.it.hs-heilbronn.de/it/courses/seb/lab/ss25/group-03" # Your project URL
+
+build:
+  stage: build
+  image: docker:latest
+  services:
+    - docker:dind
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+  script:
+    - echo "Building Docker image for branch $CI_COMMIT_BRANCH..."
+
+    - docker build -t $IMAGE_NAME . 
+    - docker push $IMAGE_NAME
+
+test:
+  stage: test
+  image: docker:latest # Keeping it minimal for testing core logic
+  services:
+    - docker:dind
+  dependencies:
+    - build
+  before_script:
+  before_script:
+    - docker login -u "$CI_REGISTRY_USER" -p "$CI_REGISTRY_PASSWORD" "$CI_REGISTRY"
+
+  script:
+    - echo "Pulling image:" $IMAGE_NAME
+    - docker pull $IMAGE_NAME
+
+    - sed -i "s|placeholder|$IMAGE_NAME|g" docker-compose.test.yml
+    - docker-compose -f docker-compose.test.yml down --remove-orphans # Clean up any previous test runs
+    - docker-compose -f docker-compose.test.yml up -d
+    - docker-compose -f docker-compose.test.yml exec testapp bin/rails db:migrate:reset
+    - docker-compose -f docker-compose.test.yml exec testapp bin/rails test test/
+    - docker-compose -f docker-compose.test.yml down
+
+    - echo "Test environment stopped."
+  artifacts:
+    expire_in: 1 hour
+
+
+deploy:
+  stage: deploy
+  image: docker:latest
+  services:
+    - docker:dind
+  dependencies:
+    - test
+  before_script:
+    - 'command -v ssh-agent >/dev/null || ( apt-get update -y && apt-get install openssh-client -y )'
+    - 'command -v base64 >/dev/null || ( apt-get update -y && apt-get install coreutils -y )'
+    - eval $(ssh-agent -s)
+    - echo "$SSH_PRIVATE_KEY" | base64 -d | ssh-add -
+    - mkdir -p ~/.ssh
+    - chmod 700 ~/.ssh
+    - cp "$SSH_KNOWN_HOSTS" ~/.ssh/known_hosts
+    - chmod 644 ~/.ssh/known_hosts
+
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+  script:
+    - echo "Deployment script executed."#
+    - ssh -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null ubuntu@193.196.55.154 "cd /home/ubuntu/group-03 && ./deploy.sh"
+  environment:
+    name: production
+
+
+notify_test_success:
+  stage: notify
+  image: ubuntu:latest
+  dependencies:
+    - test
+  rules:
+    - when: on_success
+  script:
+    - apt-get update -yq
+    - apt-get install -yq curl
+    - DISCORD_MESSAGE=""
+    - BRANCH_NAME="$CI_COMMIT_BRANCH"
+    - PIPELINE_ID="$CI_PIPELINE_ID"
+    - PIPELINE_URL="$GITLAB_PROJECT_URL/-/pipelines/$CI_PIPELINE_ID"
+    - |
+      DISCORD_MESSAGE="✅ Tests in branch '$BRANCH_NAME' (Pipeline #$PIPELINE_ID) were successful! Pipeline URL: $PIPELINE_URL"
+      curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$DISCORD_MESSAGE\"}" "$DISCORD_WEBHOOK_URL"
+
+notify_test_failure:
+  stage: notify
+  image: ubuntu:latest
+  dependencies:
+    - test
+  rules:
+    - when: on_failure
+  script:
+    - apt-get update -yq
+    - apt-get install -yq curl
+    - pwd
+    - DISCORD_MESSAGE=""
+    - BRANCH_NAME="$CI_COMMIT_BRANCH"
+    - PIPELINE_ID="$CI_PIPELINE_ID"
+    - PIPELINE_URL="$GITLAB_PROJECT_URL/-/pipelines/$CI_PIPELINE_ID"
+    - CI_JOB_URL_TEST=$(echo "$CI_PROJECT_URL/-/jobs/"$(gitlab-runner jobs list --all-runners --output json | jq -r '.[] | select(.name == "test") | .id'))
+    - |
+      DISCORD_MESSAGE="❌ Tests in branch '$BRANCH_NAME' (Pipeline #$PIPELINE_ID) failed! Check the logs: $PIPELINE_URL"
+      curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$DISCORD_MESSAGE\"}" "$DISCORD_WEBHOOK_URL"
+
+notify_deploy_success:
+  stage: notify
+  image: ubuntu:latest
+  before_script: []
+  dependencies:
+    - deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+      when: on_success
+  script:
+    - apt-get update -yq
+    - apt-get install -yq curl
+    - MESSAGE=""
+    - JOB_NAME="Deploy Job"
+    - PIPELINE_ID="$CI_PIPELINE_ID"
+    - GITLAB_URL="$CI_PROJECT_URL"
+    - PIPELINE_URL="$GITLAB_PROJECT_URL/-/pipelines/$CI_PIPELINE_ID"
+    - |
+      MESSAGE="🚀 $JOB_NAME (Pipeline $PIPELINE_ID) in '$GITLAB_URL' succeeded!"
+      curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$MESSAGE\"}" "$DISCORD_WEBHOOK_URL"
+
+notify_deploy_failure:
+  stage: notify
+  image: ubuntu:latest
+  before_script: []
+  dependencies:
+    - deploy
+  rules:
+    - if: $CI_COMMIT_BRANCH == "main" || $CI_COMMIT_TAG =~ /^v\d+\.\d+\.\d+$/
+      when: on_failure
+  script:
+    - apt-get update -yq
+    - apt-get install -yq curl
+    - MESSAGE=""
+    - JOB_NAME="Deploy Job"
+    - PIPELINE_ID="$CI_PIPELINE_ID"
+    - GITLAB_URL="$CI_PROJECT_URL"
+    - PIPELINE_URL="$GITLAB_PROJECT_URL/-/pipelines/$CI_PIPELINE_ID"
+    - CI_JOB_URL_DEPLOY=$(echo "$CI_PROJECT_URL/-/jobs/"$(gitlab-runner jobs list --all-runners --output json | jq -r '.[] | select(.name == "deploy") | .id'))
+    - |
+      MESSAGE="🔥 $JOB_NAME (Pipeline $PIPELINE_ID) in '$GITLAB_URL' failed!"
+      curl -X POST -H "Content-Type: application/json" -d "{\"content\":\"$MESSAGE\"}" "$DISCORD_WEBHOOK_URL"

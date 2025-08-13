@@ -1,0 +1,14 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+field_one:
+  variableName: "Field1"
+  title: "Field 1"
+  typefield: text
+  form: first_form
+
+field_two:
+  variableName: "Field2"
+  title: "Field 2"
+  typefield: number
+  form: second_form
+
